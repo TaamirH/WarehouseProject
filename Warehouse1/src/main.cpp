@@ -10,6 +10,8 @@ int main(int argc, char** argv){
         std::cout << "usage: warehouse <config_path>" << std::endl;
         return 0;
     }
+    //ajksdfojoksdaf
+    //hio
     string configurationFile = argv[1];
     WareHouse wareHouse(configurationFile);
     wareHouse.start();
