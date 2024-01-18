@@ -16,6 +16,7 @@ class WareHouse {
     public:
         WareHouse(const string &configFilePath);
         int i =1;
+        int j=3;
         void start();
         const vector<BaseAction*> &getActionsLog() const;
         void addOrder(Order* order);
