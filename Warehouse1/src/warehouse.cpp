@@ -9,12 +9,13 @@ class BaseAction;
 class Volunteer;
 
 // Warehouse responsible for Volunteers, Customers and Actions.
-
+//finish
 
 class WareHouse {
 
     public:
         WareHouse(const string &configFilePath);
+        int i =1;
         void start();
         const vector<BaseAction*> &getActionsLog() const;
         void addOrder(Order* order);
