@@ -1,6 +1,5 @@
 #include "WareHouse.h"
 #include <iostream>
-
 using namespace std;
 
 WareHouse* backup = nullptr;
@@ -11,7 +10,7 @@ int main(int argc, char** argv){
         return 0;
     }
     //ajksdfojoksdaf
-    //hio
+    //hiofdsaf
     //start
     //l=5
     string configurationFile = argv[1];

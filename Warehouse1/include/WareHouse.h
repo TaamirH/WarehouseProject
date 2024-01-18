@@ -15,6 +15,7 @@ class Volunteer;
 class WareHouse {
 
     public:
+        bool parseFile(const std::string& configFilePath, std::vector<Customer>& customers, std::vector<Volunteer>& volunteers);
         WareHouse(const string &configFilePath);
         void start();
         const vector<BaseAction*> &getActionsLog() const;

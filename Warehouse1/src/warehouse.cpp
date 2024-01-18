@@ -3,10 +3,13 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 using namespace std;
 
 class BaseAction;
 class Volunteer;
+class Customer;
+class Order;
 
 // Warehouse responsible for Volunteers, Customers and Actions.
 //finish
@@ -14,10 +17,41 @@ class Volunteer;
 class WareHouse {
 
     public:
+        bool parseFile(const std::string& configFilePath, std::vector<Customer>& customers, std::vector<Volunteer>& volunteers) {
+        std::ifstream file(configFilePath);
+        if (!file.is_open()) {
+         std::cerr << "Error opening file!" << std::endl;
+        return false;
+                            
+        }
+        std::string line;
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string type;
+        iss >> type;
+
+        if (type == "customer") {
+            std::string name, typeStr;
+            int distance, maxOrders;
+            iss >> name >> typeStr >> distance >> maxOrders;
+            customers.push_back(Customer(name, typeStr, distance, maxOrders)); // Assuming a constructor for Customer
+        } else if (type == "volunteer") {
+            std::string name, role;
+            int coolDownOrMaxDistance, distancePerStep = 0, maxOrders = -1; // Optional values initialized
+            iss >> name >> role >> coolDownOrMaxDistance;
+            if (iss >> distancePerStep) { // Check for optional values
+                iss >> maxOrders;
+            }
+            volunteers.push_back(Volunteer(name, role, coolDownOrMaxDistance, distancePerStep, maxOrders)); // Assuming a constructor for Volunteer
+        } else {
+            // Ignore comment lines
+        }
+    }
+
+    return true;}
+
         WareHouse(const string &configFilePath);
-        int i =1;
-        int j=3;
-        int l=5;
+
         void start();
         const vector<BaseAction*> &getActionsLog() const;
         void addOrder(Order* order);
