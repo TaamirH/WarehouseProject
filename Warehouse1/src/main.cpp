@@ -13,6 +13,7 @@ int main(int argc, char** argv){
     //ajksdfojoksdaf
     //hio
     //start
+    //l=5
     string configurationFile = argv[1];
     WareHouse wareHouse(configurationFile);
     wareHouse.start();
