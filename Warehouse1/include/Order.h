@@ -17,7 +17,7 @@ enum class OrderStatus {
 class Order {
 
     public:
-        Order(int id, int customerId, int distance);
+        Order(int id, int customerId, int distance);//id will be a counter?
         int getId() const;
         int getCustomerId() const;
         void setStatus(OrderStatus status);

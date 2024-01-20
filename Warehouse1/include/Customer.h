@@ -8,7 +8,7 @@ using std::vector;
 
 class Customer {
     public:
-        Customer(int id, const string &name, int locationDistance, int maxOrders);
+        Customer(int _id, const string &_name, int _locationDistance, int _maxOrders);
         const string &getName() const;
         int getId() const;
         int getCustomerDistance() const;
