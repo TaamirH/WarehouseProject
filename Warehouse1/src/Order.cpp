@@ -24,12 +24,12 @@ class Order {
         int getCustomerId() const{
             return customerId;
         };
-        void setStatus(OrderStatus status);
-        void setCollectorId(int collectorId);
-        void setDriverId(int driverId);
-        int getCollectorId() const;
-        int getDriverId() const;
-        OrderStatus getStatus() const;
+        void setStatus(OrderStatus status){};
+        void setCollectorId(int _collectorId){collectorId=_collectorId;}
+        void setDriverId(int _driverId){driverId = _driverId;}
+        int getCollectorId() const{return collectorId;}
+        int getDriverId() const{return driverId;}
+        OrderStatus getStatus() const{return status;}
         const string toString() const;
 
     private:
