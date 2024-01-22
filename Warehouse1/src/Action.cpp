@@ -1,7 +1,10 @@
 #pragma once
 #include <string>
+#include <iostream>
 #include <vector>
 #include "../include/WareHouse.h"
+#include "../include/Customer.h"
+class customer;
 using std::string;
 using std::vector;
 
@@ -23,9 +26,16 @@ class BaseAction{
         virtual BaseAction* clone() const=0;
 
     protected:
-        void complete();
-        void error(string errorMsg);
-        string getErrorMsg() const;
+        void complete(){
+            status = ActionStatus::COMPLETED;
+        };
+        void error(string _errorMsg){
+            status = ActionStatus::ERROR;
+            errorMsg=_errorMsg;
+            std::cout <<"Error:"<<errorMsg;
+        };
+        string getErrorMsg() const{
+            return errorMsg;}
 
     private:
         string errorMsg;
