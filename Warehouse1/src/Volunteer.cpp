@@ -9,12 +9,12 @@ using std::vector;
 
 class Volunteer {
     public:
-        Volunteer(int id, const string &name);
-        int getId() const;
-        const string &getName() const;
-        int getActiveOrderId() const;
-        int getCompletedOrderId() const;
-        bool isBusy() const; // Signal whether the volunteer is currently processing an order    
+        Volunteer(int _id, const string &_name):id{_id}, name{_name}{};
+        int getId() const{return id;}
+        const string &getName() const{return name;}
+        int getActiveOrderId() const{return activeOrderId;}
+        int getCompletedOrderId() const{return completedOrderId;}
+        bool isBusy() const {return !activeOrderId==NO_ORDER;} // Signal whether the volunteer is currently processing an order    
         virtual bool hasOrdersLeft() const = 0; // Signal whether the volunteer didn't reach orders limit,Always true for CollectorVolunteer and DriverVolunteer
         virtual bool canTakeOrder(const Order &order) const = 0; // Signal if the volunteer can take the order.      
         virtual void acceptOrder(const Order &order) = 0; // Prepare for new order(Reset activeOrderId,TimeLeft,DistanceLeft,OrdersLeft depends on the volunteer type)
@@ -38,14 +38,16 @@ class Volunteer {
 class CollectorVolunteer: public Volunteer {
 
     public:
-        CollectorVolunteer(int id, const string &name, int coolDown);
+        CollectorVolunteer(int _id, const string &_name, int _coolDown):
+        Volunteer(_id, _name),coolDown{_coolDown}{};
         CollectorVolunteer *clone() const override;
         void step() override;
-        int getCoolDown() const;
-        int getTimeLeft() const;
-        bool decreaseCoolDown();//Decrease timeLeft by 1,return true if timeLeft=0,false otherwise
-        bool hasOrdersLeft() const override;
-        bool canTakeOrder(const Order &order) const override;
+        int getCoolDown() const{return coolDown;}
+        int getTimeLeft() const{return timeLeft;}
+        bool decreaseCoolDown(){timeLeft--;
+        return getTimeLeft==0;}        //Decrease timeLeft by 1,return true if timeLeft=0,false otherwise
+        bool hasOrdersLeft() const override {return true;}
+        bool canTakeOrder(const Order &order) const override {};
         void acceptOrder(const Order &order) override;
         string toString() const override;
     
@@ -57,14 +59,15 @@ class CollectorVolunteer: public Volunteer {
 class LimitedCollectorVolunteer: public CollectorVolunteer {
 
     public:
-        LimitedCollectorVolunteer(int id, const string &name, int coolDown ,int maxOrders);
+        LimitedCollectorVolunteer(int _id, const string &_name, int _coolDown ,int _maxOrders):
+        CollectorVolunteer(_id, _name, _coolDown), maxOrders{_maxOrders}{};
         LimitedCollectorVolunteer *clone() const override;
-        bool hasOrdersLeft() const override;
-        bool canTakeOrder(const Order &order) const override;
+        bool hasOrdersLeft() const override{return ordersLeft!=0;}
+        bool canTakeOrder(const Order &order) const override{};
         void acceptOrder(const Order &order) override;
 
-        int getMaxOrders() const;
-        int getNumOrdersLeft() const;
+        int getMaxOrders() const{return maxOrders;}
+        int getNumOrdersLeft() const{return ordersLeft;}
         string toString() const override;
     
     private:
