@@ -7,6 +7,7 @@
 
 class BaseAction;
 class Volunteer;
+class Customer;
 
 // Warehouse responsible for Volunteers, Customers Actions, and Orders.
 
