@@ -17,7 +17,7 @@ class Order;
 class WareHouse {
 
     public:
-        bool parseFile(const std::string& configFilePath, std::vector<Customer>& customers, std::vector<Volunteer>& volunteers) {
+      /*  bool parseFile(const std::string& configFilePath, std::vector<Customer>& customers, std::vector<Volunteer>& volunteers) {
         std::ifstream file(configFilePath);
         if (!file.is_open()) {
          std::cerr << "Error opening file!" << std::endl;
@@ -48,10 +48,9 @@ class WareHouse {
         }
     }
 
-    return true;}
+    return true;}*/
 
         WareHouse(const string &configFilePath);
-
         void start();
         const vector<BaseAction*> &getActionsLog() const;
         void addOrder(Order* order);

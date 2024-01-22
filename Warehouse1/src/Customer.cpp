@@ -10,7 +10,7 @@ using std::vector;
 class Customer {
     public:
         Customer(int _id, const string &_name, int _locationDistance, int _maxOrders):
-        id{_id},name{_name},locationDistance{_locationDistance},maxOrders{_maxOrders}{
+            id{_id},name{_name},locationDistance{_locationDistance},maxOrders{_maxOrders}{
             madeOrders=0;
         };
         const string &getName() const{
@@ -30,6 +30,7 @@ class Customer {
         }; //Returns true if the customer didn't reach max orders
         const vector<int> &getOrdersIds() const;
         int addOrder(int orderId){
+            
         }; //return OrderId if order was added successfully, -1 otherwise
 
         virtual Customer *clone() const = 0; // Return a copy of the customer
