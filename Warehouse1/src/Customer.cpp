@@ -48,7 +48,8 @@ class Customer {
 
 class SoldierCustomer: public Customer {
     public:
-        SoldierCustomer(int id, const string &name, int locationDistance, int maxOrders);
+        SoldierCustomer(int _id, const string &_name, int _locationDistance, int _maxOrders):
+          Customer(_id, _name, _locationDistance, _maxOrders){};
         SoldierCustomer *clone() const override;
     
     private:
