@@ -30,7 +30,11 @@ class Customer {
         }; //Returns true if the customer didn't reach max orders
         const vector<int> &getOrdersIds() const;
         int addOrder(int orderId){
-            
+            if (canMakeOrder){
+                ordersId.push_back(orderId);
+                return orderId;}
+            else
+                return -1;
         }; //return OrderId if order was added successfully, -1 otherwise
 
         virtual Customer *clone() const = 0; // Return a copy of the customer
