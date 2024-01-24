@@ -13,7 +13,7 @@ enum class ActionStatus{
 };
 
 enum class CustomerType{
-    Soldier, Civilian
+    Soldier, Civilian   
 };
 
 
@@ -67,8 +67,26 @@ class AddOrder : public BaseAction {
 
 class AddCustomer : public BaseAction {
     public:
+    CustomerType toCustomerType(const std::string& str) {
+        if (str == "Soldier") {
+            return CustomerType::Soldier;
+    }   else if (str == "Civilian") {
+            return CustomerType::Civilian;
+    }   else {
+        // Handle invalid input
+            throw std::invalid_argument("Invalid customer type string");
+    }
+}
+    string CTToString(CustomerType _customerType){
+        if (_customerType== CustomerType::Soldier)
+            return "Soldier";
+        else if (_customerType==CustomerType::Civilian)
+            return "Civilian";
+        else
+            throw std::invalid_argument("Invalid customer type string");
+    }
         AddCustomer(string _customerName, string _customerType, int _distance, int _maxOrders):
-        customerName{_customerName}, customerType{CustomerType::Civilian}, distance{_distance}, 
+        customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override{return new AddCustomer(*this);}
