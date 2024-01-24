@@ -60,9 +60,6 @@ class AddOrder : public BaseAction {
         void act(WareHouse &wareHouse) override;
         string toString() const override{return "order " + std::to_string(customerId);}
         AddOrder *clone() const override{return new AddOrder(*this);}
-    private:
-        const int customerId;
-};
 
 
 class AddCustomer : public BaseAction {
@@ -90,7 +87,8 @@ class AddCustomer : public BaseAction {
         maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override{return new AddCustomer(*this);}
-        string toString() const override{return ;}
+        string toString() const override{return "customer "+ customerName //+ CTToString(customerType)
+         + std::to_string(distance) + std::to_string(maxOrders);}
     private:
         const string customerName;
         const CustomerType customerType;
