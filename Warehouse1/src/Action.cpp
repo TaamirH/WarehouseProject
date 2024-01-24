@@ -56,10 +56,10 @@ class SimulateStep : public BaseAction {
 
 class AddOrder : public BaseAction {
     public:
-        AddOrder(int id);
+        AddOrder(int id): customerId{id}{};
         void act(WareHouse &wareHouse) override;
-        string toString() const override;
-        AddOrder *clone() const override;
+        string toString() const override{return "order " + std::to_string(customerId);}
+        AddOrder *clone() const override{return new AddOrder(*this);}
     private:
         const int customerId;
 };
@@ -67,10 +67,12 @@ class AddOrder : public BaseAction {
 
 class AddCustomer : public BaseAction {
     public:
-        AddCustomer(string customerName, string customerType, int distance, int maxOrders);
+        AddCustomer(string _customerName, string _customerType, int _distance, int _maxOrders):
+        customerName{_customerName}, customerType{CustomerType::Civilian}, distance{_distance}, 
+        maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override;
-        AddCustomer *clone() const override;
-        string toString() const override;
+        AddCustomer *clone() const override{return new AddCustomer(*this);}
+        string toString() const override{return ;}
     private:
         const string customerName;
         const CustomerType customerType;
