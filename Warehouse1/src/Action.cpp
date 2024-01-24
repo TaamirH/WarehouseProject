@@ -45,10 +45,12 @@ class BaseAction{
 class SimulateStep : public BaseAction {
 
     public:
-        SimulateStep(int numOfSteps);
+        SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{};
         void act(WareHouse &wareHouse) override;
-        std::string toString() const override;
-        SimulateStep *clone() const override;
+        
+    
+        std::string toString() const override{return "step " + std::to_string(numOfSteps);}
+        SimulateStep *clone() const override{return new SimulateStep(*this);}
 
     private:
         const int numOfSteps;
