@@ -62,6 +62,7 @@ class AddOrder : public BaseAction {
         AddOrder *clone() const override{return new AddOrder(*this);}
     private:
         const int customerId;
+};
 
 class AddCustomer : public BaseAction {
     public:
@@ -101,7 +102,9 @@ class AddCustomer : public BaseAction {
 
 class PrintOrderStatus : public BaseAction {
     public:
-        PrintOrderStatus(int id);
+        PrintOrderStatus(int id){
+            if (id> wareHou)
+        };
         void act(WareHouse &wareHouse) override;
         PrintOrderStatus *clone() const override;
         string toString() const override;

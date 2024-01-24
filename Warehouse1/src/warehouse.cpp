@@ -51,14 +51,19 @@ class WareHouse {
                 for (const auto& orderPtr : *orders) {
                     if (orderPtr->getId() == orderId) {
                         return *orderPtr;
+                    }
+                }
             }
-        }
-    }
-
-    // Handle the case where the order is not found
-    throw std::runtime_error("Order not found"); // Or return a nullptr if preferred
+        // Handle the case where the order is not found
+        throw std::runtime_error("Order not found"); 
 
         };
+        int getCustomerCounter() const{
+            return customerCounter;}
+        int getVolunteerCounter() const{
+            return volunteerCounter;}
+        int getOrderCounter() const{
+            return orderCounter;}
         void close();
         void open();
 
@@ -72,6 +77,7 @@ class WareHouse {
         vector<Customer*> customers;
         int customerCounter; //For assigning unique customer IDs
         int volunteerCounter; //For assigning unique volunteer IDs
+        int orderCounter;
 
     
 };
