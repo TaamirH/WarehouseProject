@@ -113,7 +113,7 @@ class LimitedDriverVolunteer: public DriverVolunteer {
     public:
         LimitedDriverVolunteer(int _id, const string &_name, int _maxDistance, int _distancePerStep,int _maxOrders)
         :DriverVolunteer(_id, _name, _maxDistance, _distancePerStep), maxOrders{_maxOrders}{};
-        LimitedDriverVolunteer *clone() const override{return new LimitedCollectorVolunteer(*this);}
+        LimitedDriverVolunteer *clone() const override{return new LimitedDriverVolunteer(*this);}
         int getMaxOrders() const {return maxOrders;}
         int getNumOrdersLeft() const {return ordersLeft;}
         bool hasOrdersLeft() const override{return ordersLeft>0;}
