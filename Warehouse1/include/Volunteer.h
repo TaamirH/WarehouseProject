@@ -87,6 +87,7 @@ class DriverVolunteer: public Volunteer {
         void acceptOrder(const Order &order) override; // Assign distanceLeft to order's distance
         void step() override; // Decrease distanceLeft by distancePerStep
         string toString() const override;
+        void setDistanceLeft(int i);
 
     private:
         const int maxDistance; // The maximum distance of ANY order the volunteer can take
@@ -105,6 +106,7 @@ class LimitedDriverVolunteer: public DriverVolunteer {
         bool canTakeOrder(const Order &order) const override; // Signal if the volunteer is not busy, the order is within the maxDistance.
         void acceptOrder(const Order &order) override; // Assign distanceLeft to order's distance and decrease ordersLeft
         string toString() const override;
+        
 
     private:
         const int maxOrders; // The number of orders the volunteer can process in the whole simulation
