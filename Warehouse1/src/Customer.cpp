@@ -56,7 +56,7 @@ class SoldierCustomer: public Customer {
         SoldierCustomer(int _id, const string &_name, int _locationDistance, int _maxOrders):
           Customer(_id, _name, _locationDistance, _maxOrders){};
         SoldierCustomer *clone() const override{
- //           return(new SoldierCustomer(getId,&getName,getCustomerDistance,getMaxOrders));
+            return(new SoldierCustomer(*this));
         }
     
     private:
@@ -66,7 +66,10 @@ class SoldierCustomer: public Customer {
 class CivilianCustomer: public Customer {
     public:
         CivilianCustomer(int id, const string &name, int locationDistance, int maxOrders);
-        CivilianCustomer *clone() const override;
+        CivilianCustomer *clone() const override{
+            return(new CivilianCustomer(*this));
+
+        };
     
     private:
         

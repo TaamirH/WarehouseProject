@@ -6,6 +6,8 @@
 #include <sstream>
 #include <algorithm>
 #include <memory>
+#include "../include/Customer.h"
+#include "../include/Volunteer.h"
 
 using namespace std;
 
@@ -28,16 +30,35 @@ class WareHouse {
         void printActionsLogs();
         Customer &getCustomer(int customerId) const{
             for (const auto& customer : customers) {
-            if (customer->getId() == customerId) {
-                return *customer;
+                if ((*customer).getId() == customerId) {
+                    return *customer;
             }
         }
-
         // If no matching customer is found, throw an exception or handle it accordingly
         throw std::out_of_range("Customer with the specified ID not found");
         };
-        Volunteer &getVolunteer(int volunteerId) const;
-        Order &getOrder(int orderId) const;
+        Volunteer &getVolunteer(int volunteerId) const{
+            for (const auto& volunteer : volunteers){
+                if ((*volunteer).getId()==volunteerId){
+                    return *volunteer;
+                }
+            }
+        throw std::out_of_range("Volunteer with the specified ID not found");
+
+        };
+        Order &getOrder(int orderId) const{
+            for (const auto& orders : {&pendingOrders, &inProcessOrders, &completedOrders}) {
+                for (const auto& orderPtr : *orders) {
+                    if (orderPtr->getId() == orderId) {
+                        return *orderPtr;
+            }
+        }
+    }
+
+    // Handle the case where the order is not found
+    throw std::runtime_error("Order not found"); // Or return a nullptr if preferred
+
+        };
         void close();
         void open();
 
@@ -46,7 +67,7 @@ class WareHouse {
         vector<BaseAction*> actionsLog;
         vector<Volunteer*> volunteers;
         vector<Order*> pendingOrders;
-        vector<Order*> vol;
+        vector<Order*> inProcessOrders;
         vector<Order*> completedOrders;
         vector<Customer*> customers;
         int customerCounter; //For assigning unique customer IDs
