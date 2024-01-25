@@ -7,6 +7,7 @@
 class customer;
 using std::string;
 using std::vector;
+#define NULL ((void*)0)
 
 enum class ActionStatus{
     COMPLETED, ERROR
@@ -86,12 +87,15 @@ class AddCustomer : public BaseAction {
         else
             throw std::invalid_argument("Invalid customer type string");
     }
+
+
+
         AddCustomer(string _customerName, string _customerType, int _distance, int _maxOrders):
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override{return new AddCustomer(*this);}
-        string toString() const override{return "customer "+ customerName + CTToString(customerType)
+        string toString() const override {return "customer "+ customerName + CTToString(customerType)
          + std::to_string(distance) + std::to_string(maxOrders);}
     private:
         const string customerName;
@@ -104,17 +108,46 @@ class AddCustomer : public BaseAction {
 
 class PrintOrderStatus : public BaseAction {
     public:
+            string OSToString(OrderStatus _orderStatus) const{
+        if (_orderStatus== OrderStatus::PENDING)
+            return "Pending";
+        else if (_orderStatus==OrderStatus::COLLECTING)
+            return "Collecting";
+        else if (_orderStatus==OrderStatus::DELIVERING)
+            return "Delivering";
+        else if (_orderStatus==OrderStatus::COMPLETED)
+            return "Completed";
+        else
+            throw std::invalid_argument("Invalid customer type string");
+    }
+
         PrintOrderStatus(int id):orderId(id){};
-        void act(WareHouse &wareHouse) override;
-        PrintOrderStatus *clone() const override{return new PrintOrderStatus(*this);};
-        string toString() const override;
+
+        void act(WareHouse &wareHouse) override {
+        Order _order = wareHouse.getOrder(orderId); 
+        // if (_order==nullptr) 
+        //   add error ""Order doesn't exist";
+        // else{
+        std::cout<< "OrderId: " + std::to_string(orderId) +
+        "\nOrderStatus: " + OSToString(_order.getStatus());
+        if (_order.getCollectorId() == NO_VOLUNTEER)
+            std::cout<<"\nNone";
+        else
+        "\nCostumerID: " +std::to_string (_order.getCustomerId()) ;
+        if (_order.getDriverId() == NO_VOLUNTEER)
+            std::cout<<"\nNone";
+        else
+        "\nDriverID: " +std::to_string (_order.getDriverId());
+        }
+        PrintOrderStatus *clone() const override{return new PrintOrderStatus(*this);}
+        string toString() const override{return "orderStatus" + std::to_string(orderId);}
     private:
         const int orderId;
 };
 
 class PrintCustomerStatus: public BaseAction {
     public:
-        PrintCustomerStatus(int customerId);
+        PrintCustomerStatus(int _customerId):customerId{_customerId}{};
         void act(WareHouse &wareHouse) override;
         PrintCustomerStatus *clone() const override;
         string toString() const override;

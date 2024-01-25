@@ -74,6 +74,7 @@ class AddCustomer : public BaseAction {
 
 class PrintOrderStatus : public BaseAction {
     public:
+        string OSToString(OrderStatus _orderStatus);
         PrintOrderStatus(int id);
         void act(WareHouse &wareHouse) override;
         PrintOrderStatus *clone() const override;

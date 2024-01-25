@@ -9,6 +9,9 @@
 #include "../include/Customer.h"
 #include "../include/Volunteer.h"
 #include "../include/Action.h"
+#define NULL __null
+#define NULL ((void*)0)
+
 
 
 using namespace std;
@@ -197,8 +200,8 @@ class WareHouse {
             }
         }
     }
-    
 
+    //return nullptr ;
     // Handle the case where the order is not found
     throw std::runtime_error("Order not found"); // Or return a nullptr if preferred
 
