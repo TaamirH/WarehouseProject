@@ -45,7 +45,7 @@ class BaseAction{
 class SimulateStep : public BaseAction {
 
     public:
-        SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{};
+        SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}//need to complete;
         void act(WareHouse &wareHouse) override;
         
     
@@ -78,7 +78,7 @@ class AddCustomer : public BaseAction {
             throw std::invalid_argument("Invalid customer type string");
     }
 }
-    string CTToString(CustomerType _customerType){
+    string CTToString(CustomerType _customerType) const{
         if (_customerType== CustomerType::Soldier)
             return "Soldier";
         else if (_customerType==CustomerType::Civilian)
@@ -91,7 +91,7 @@ class AddCustomer : public BaseAction {
         maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override{return new AddCustomer(*this);}
-        string toString() const override{return "customer "+ customerName //+ CTToString(customerType)
+        string toString() const override{return "customer "+ customerName + CTToString(customerType)
          + std::to_string(distance) + std::to_string(maxOrders);}
     private:
         const string customerName;
@@ -104,9 +104,9 @@ class AddCustomer : public BaseAction {
 
 class PrintOrderStatus : public BaseAction {
     public:
-        PrintOrderStatus(int id);
+        PrintOrderStatus(int id):orderId(id){};
         void act(WareHouse &wareHouse) override;
-        PrintOrderStatus *clone() const override;
+        PrintOrderStatus *clone() const override{return new PrintOrderStatus(*this);};
         string toString() const override;
     private:
         const int orderId;

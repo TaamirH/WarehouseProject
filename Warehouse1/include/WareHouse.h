@@ -15,6 +15,8 @@ class Customer;
 class WareHouse {
 
     public:
+        std::string trimLeadingWhitespace(const std::string &str);
+        void parseFile(const string &filePath);
         WareHouse(const string &configFilePath);
         void start();
         void addOrder(Order* order);
