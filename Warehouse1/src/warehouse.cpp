@@ -155,11 +155,13 @@ class WareHouse {
 }
         WareHouse(const string &configFilePath){
             customerCounter,volunteerCounter,orderCounter=0;
-            isOpen=true;
+            open();
             parseFile(configFilePath);
         };
         void start();
-        const vector<BaseAction*> &getActionsLog() const;
+        const vector<BaseAction*> &getActionsLog() const{
+            return actionsLog;
+        };
         void addOrder(Order* order){
             pendingOrders.push_back(order);
         };
@@ -213,7 +215,9 @@ class WareHouse {
         int getOrderCounter() const{
             return orderCounter;}
         void close();
-        void open();
+        void open(){
+            isOpen=true;
+        };
 
     private:
         bool isOpen;
