@@ -152,7 +152,7 @@ class WareHouse {
 }
         WareHouse(const string &configFilePath){
             customerCounter,volunteerCounter,orderCounter=0;
-            isOpen=true;
+            open();
             parseFile(configFilePath);
         };
         void start();
@@ -212,7 +212,9 @@ class WareHouse {
         int getOrderCounter() const{
             return orderCounter;}
         void close();
-        void open();
+        void open(){
+            isOpen=true;
+        };
 
     private:
         bool isOpen;
