@@ -156,7 +156,9 @@ class WareHouse {
             parseFile(configFilePath);
         };
         void start();
-        const vector<BaseAction*> &getActionsLog() const;
+        const vector<BaseAction*> &getActionsLog() const{
+            return actionsLog;
+        };
         void addOrder(Order* order){
             pendingOrders.push_back(order);
         };
