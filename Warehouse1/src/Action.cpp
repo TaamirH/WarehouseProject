@@ -183,25 +183,40 @@ class PrintVolunteerStatus : public BaseAction {
             Volunteer &vol =_wareHouse.getVolunteer(volunteerId);
 
              // if (vol==nullptr) 
-        //   add error ""Order doesn't exist";
+        //   add error ""Volunteer doesn't exist";
         // else{
 
             std::cout<<"voluteerID: " + std::to_string(volunteerId);
-            if (vol.isBusy())
-                std::cout<< "False \nNone \nNone";
-            else{ std::cout<<"True \nOrderId: " + std::to_string(vol.getActiveOrderId());
+            bool busy = vol.isBusy();
+            if (!busy)
+                std::cout<< "\n isBusy: False \n None \n None";
+            else std::cout<<"\n isBusy: True \nOrderId: " + std::to_string(vol.getActiveOrderId());
             
-            if (dynamic_cast<DriverVolunteer*>(&vol)==nullptr)
-                std::cout<<"TimeLeft: "+ vol.ge
+             if (!(dynamic_cast<CollectorVolunteer*>(&vol)==nullptr)){         //is a collector volunteer
+                 CollectorVolunteer* cv = dynamic_cast <CollectorVolunteer*>(&vol);
+                 if (busy)
+                   std::cout<<"\nTimeLeft: "+  std::to_string(cv->getTimeLeft());
+                delete cv;
+                if (!(dynamic_cast<LimitedCollectorVolunteer*>(&vol)==nullptr)){         //is a limited collector volunteer
+                    LimitedCollectorVolunteer* lcv = dynamic_cast <LimitedCollectorVolunteer*>(&vol);
+                    std::cout<<"Ordersleft: " + std::to_string(lcv->getActiveOrderId());
+                    delete lcv;
+                }
+                else std::cout<<"No Limit";
+                
+             }
+             else{//is a driver volunteer
+                DriverVolunteer* dv = dynamic_cast <DriverVolunteer*>(&vol);
+                if(busy)
+                    std::cout<<"\nDistanceLeft: "+  std::to_string(dv->getDistanceLeft());
+                delete dv;
+                if (!(dynamic_cast<LimitedDriverVolunteer*>(&vol)==nullptr)){         //is a limited Driver volunteer
+                    LimitedDriverVolunteer* ldv = dynamic_cast <LimitedDriverVolunteer*>(&vol);
+                    std::cout<<"Ordersleft: " + std::to_string(ldv->getActiveOrderId());
+                    delete ldv;
+                }  else std::cout<<"No Limit"; }
 
-
-
-
-            };
-
-
-
-       };
+}
 
         PrintVolunteerStatus *clone() const override{return new PrintVolunteerStatus(*this);}
         string toString() const override{return "volunteerStatus " + std::to_string(volunteerId);}
@@ -214,8 +229,8 @@ class PrintActionsLog : public BaseAction {
     public:
         PrintActionsLog();
         void act(WareHouse &wareHouse) override;
-        PrintActionsLog *clone() const override;
-        string toString() const override;
+        PrintActionsLog *clone() const override{return new PrintActionsLog(*this);}
+        string toString() const override{return "log";}
     private:
 };
 
