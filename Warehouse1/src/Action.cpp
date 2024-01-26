@@ -62,7 +62,17 @@ class SimulateStep : public BaseAction {
 class AddOrder : public BaseAction {
     public:
         AddOrder(int id): customerId{id}{};
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &wareHouse) override{
+            if (wareHouse.getCustomer(customerId).canMakeOrder()){
+
+            Order* newOrd = new Order (wareHouse.getOrderCounter(), customerId,
+             wareHouse.getCustomer(customerId).getCustomerDistance());
+            wareHouse.addOrder(newOrd);
+            delete newOrd;
+            }else
+            error("Cannot place this order");
+
+            }
         string toString() const override{return "order " + std::to_string(customerId);}
         AddOrder *clone() const override{return new AddOrder(*this);}
     private:
@@ -95,7 +105,8 @@ class AddCustomer : public BaseAction {
         AddCustomer(string _customerName, string _customerType, int _distance, int _maxOrders):
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &wareHouse) override{;
+        }
         AddCustomer *clone() const override{return new AddCustomer(*this);}
         string toString() const override {return "customer "+ customerName + CTToString(customerType)
          + std::to_string(distance) + std::to_string(maxOrders);}
