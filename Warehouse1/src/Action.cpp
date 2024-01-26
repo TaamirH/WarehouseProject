@@ -4,6 +4,8 @@
 #include <vector>
 #include "../include/WareHouse.h"
 #include "../include/Customer.h"
+class volunteer;
+#include "Volunteer.h"
 class customer;
 using std::string;
 using std::vector;
@@ -160,11 +162,11 @@ class PrintCustomerStatus: public BaseAction {
 
         PrintOrderStatus* pos = new PrintOrderStatus(97);
         for (const int ord: orders){
-            std::cout<< "OrderID: " + std::to_string(ord);
-            std::cout<< "OrderStatus: " + pos->OSToString(wareHouse.getOrder(ord).getStatus());
+            std::cout<< "\nOrderID: " + std::to_string(ord);
+            std::cout<< "\nOrderStatus: " + pos->OSToString(wareHouse.getOrder(ord).getStatus());
         }
         int numLeft = _customer.getMaxOrders() - _customer.getNumOrders();
-            std::cout<< "numOrdersLeft: " + std::to_string(numLeft);
+            std::cout<< "\nnumOrdersLeft: " + std::to_string(numLeft);
         }
 
         PrintCustomerStatus *clone() const override{return new PrintCustomerStatus(*this);}
@@ -178,10 +180,28 @@ class PrintVolunteerStatus : public BaseAction {
     public:
         PrintVolunteerStatus(int id):volunteerId{id}{};
         void act(WareHouse &_wareHouse) override{
-            Volunteer vol =_wareHouse.getVolunteer(volunteerId);
+            Volunteer &vol =_wareHouse.getVolunteer(volunteerId);
+
+             // if (vol==nullptr) 
+        //   add error ""Order doesn't exist";
+        // else{
+
+            std::cout<<"voluteerID: " + std::to_string(volunteerId);
+            if (vol.isBusy())
+                std::cout<< "False \nNone \nNone";
+            else{ std::cout<<"True \nOrderId: " + std::to_string(vol.getActiveOrderId());
+            
+            if (dynamic_cast<DriverVolunteer*>(&vol)==nullptr)
+                std::cout<<"TimeLeft: "+ vol.ge
 
 
-       ; };
+
+
+            };
+
+
+
+       };
 
         PrintVolunteerStatus *clone() const override{return new PrintVolunteerStatus(*this);}
         string toString() const override{return "volunteerStatus " + std::to_string(volunteerId);}
