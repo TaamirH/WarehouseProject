@@ -33,8 +33,7 @@ class Customer {
 class SoldierCustomer: public Customer {
     public:
         SoldierCustomer(int id, const string &name, int locationDistance, int maxOrders);
-        SoldierCustomer *clone() const override;
-        bool amISoldier();
+        SoldierCustomer *clone() const override{return new SoldierCustomer(*this);}
     
     private:
         
@@ -43,7 +42,7 @@ class SoldierCustomer: public Customer {
 class CivilianCustomer: public Customer {
     public:
         CivilianCustomer(int id, const string &name, int locationDistance, int maxOrders);
-        CivilianCustomer *clone() const override;
+        CivilianCustomer *clone() const override{return new CivilianCustomer(*this);}
     
     private:
         

@@ -58,7 +58,6 @@ class SoldierCustomer: public Customer {
           Customer(_id, _name, _locationDistance, _maxOrders){};
         SoldierCustomer *clone() const override{
             return(new SoldierCustomer(*this));
-        bool amISoldier () ;{return true;};
         }
     
     private:

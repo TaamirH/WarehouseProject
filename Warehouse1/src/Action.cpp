@@ -151,25 +151,21 @@ class PrintCustomerStatus: public BaseAction {
         void act(WareHouse &wareHouse) override{
 
 
-        Customer _customer = wareHouse.getCustomer(customerId); 
+        Customer &_customer = wareHouse.getCustomer(customerId); 
         // if (_customer==nullptr) 
         //   add error ""Order doesn't exist";
         // else{
         std::cout<< "CustomerID: " + std::to_string(customerId);
-        vector<int> &const orders = _customer.getOrdersIds());
+        vector<int> const orders = _customer.getOrdersIds();
 
-        "\nOrderID: " +  std::to_string(_customer.getOrdersIds());
-        if (_order.getCollectorId() == NO_VOLUNTEER)
-            std::cout<<"\nNone";
-        else
-        "\nCostumerID: " +std::to_string (_order.getCustomerId()) ;
-        if (_order.getDriverId() == NO_VOLUNTEER)
-            std::cout<<"\nNone";
-        else
-        "\nDriverID: " +std::to_string (_order.getDriverId());
+        PrintOrderStatus* pos = new PrintOrderStatus(97);
+        for (const int ord: orders){
+            std::cout<< "OrderID: " + std::to_string(ord);
+            std::cout<< "OrderStatus: " + pos->OSToString(wareHouse.getOrder(ord).getStatus());
         }
-        
-
+        int numLeft = _customer.getMaxOrders() - _customer.getNumOrders();
+            std::cout<< "numOrdersLeft: " + std::to_string(numLeft);
+        }
 
         PrintCustomerStatus *clone() const override{return new PrintCustomerStatus(*this);}
         string toString() const override{return "customerStatus " + std::to_string(customerId);}
@@ -181,8 +177,11 @@ class PrintCustomerStatus: public BaseAction {
 class PrintVolunteerStatus : public BaseAction {
     public:
         PrintVolunteerStatus(int id):volunteerId{id}{};
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &_wareHouse) override{
+            Volunteer vol =_wareHouse.getVolunteer(volunteerId);
 
+
+       ; };
 
         PrintVolunteerStatus *clone() const override{return new PrintVolunteerStatus(*this);}
         string toString() const override{return "volunteerStatus " + std::to_string(volunteerId);}
