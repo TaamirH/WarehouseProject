@@ -12,7 +12,7 @@ class Customer {
         Customer(int _id, const string &_name, int _locationDistance, int _maxOrders):
             id{_id},name{_name},locationDistance{_locationDistance},maxOrders{_maxOrders}{
             madeOrders=0;
-        };
+        }
         const string &getName() const{
             return name; };
         int getId() const{
@@ -30,6 +30,7 @@ class Customer {
         }; //Returns true if the customer didn't reach max orders
         const vector<int> &getOrdersIds() const{
             return ordersId;}
+
         int addOrder(int orderId){
             if (canMakeOrder){
                 ordersId.push_back(orderId);
@@ -57,6 +58,7 @@ class SoldierCustomer: public Customer {
           Customer(_id, _name, _locationDistance, _maxOrders){};
         SoldierCustomer *clone() const override{
             return(new SoldierCustomer(*this));
+        bool amISoldier () ;{return true;};
         }
     
     private:

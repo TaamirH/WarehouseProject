@@ -148,9 +148,31 @@ class PrintOrderStatus : public BaseAction {
 class PrintCustomerStatus: public BaseAction {
     public:
         PrintCustomerStatus(int _customerId):customerId{_customerId}{};
-        void act(WareHouse &wareHouse) override;
-        PrintCustomerStatus *clone() const override;
-        string toString() const override;
+        void act(WareHouse &wareHouse) override{
+
+
+        Customer _customer = wareHouse.getCustomer(customerId); 
+        // if (_customer==nullptr) 
+        //   add error ""Order doesn't exist";
+        // else{
+        std::cout<< "CustomerID: " + std::to_string(customerId);
+        vector<int> &const orders = _customer.getOrdersIds());
+
+        "\nOrderID: " +  std::to_string(_customer.getOrdersIds());
+        if (_order.getCollectorId() == NO_VOLUNTEER)
+            std::cout<<"\nNone";
+        else
+        "\nCostumerID: " +std::to_string (_order.getCustomerId()) ;
+        if (_order.getDriverId() == NO_VOLUNTEER)
+            std::cout<<"\nNone";
+        else
+        "\nDriverID: " +std::to_string (_order.getDriverId());
+        }
+        
+
+
+        PrintCustomerStatus *clone() const override{return new PrintCustomerStatus(*this);}
+        string toString() const override{return "customerStatus " + std::to_string(customerId);}
     private:
         const int customerId;
 };
@@ -158,10 +180,12 @@ class PrintCustomerStatus: public BaseAction {
 
 class PrintVolunteerStatus : public BaseAction {
     public:
-        PrintVolunteerStatus(int id);
+        PrintVolunteerStatus(int id):volunteerId{id}{};
         void act(WareHouse &wareHouse) override;
-        PrintVolunteerStatus *clone() const override;
-        string toString() const override;
+
+
+        PrintVolunteerStatus *clone() const override{return new PrintVolunteerStatus(*this);}
+        string toString() const override{return "volunteerStatus " + std::to_string(volunteerId);}
     private:
         const int volunteerId;
 };
