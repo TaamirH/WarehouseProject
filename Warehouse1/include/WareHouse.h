@@ -21,6 +21,8 @@ class WareHouse {
         WareHouse(WareHouse &other);
         WareHouse &operator=(const WareHouse &other);
         ~WareHouse();
+        WareHouse(WareHouse &&other) noexcept;
+        WareHouse& operator=(WareHouse &&other) noexcept;
         void start();
         void addOrder(Order* order);
         void addAction(BaseAction* action);
