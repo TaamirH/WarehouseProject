@@ -8,11 +8,9 @@ class volunteer;
 #include "../include/Volunteer.h"
 #include "../include/Action.h"
 class customer;
-class warehouse;
 using std::string;
 using std::vector;
 #define NULL ((void*)0)
-extern WareHouse* backup;
 
 enum class ActionStatus{
     COMPLETED, ERROR
@@ -71,7 +69,6 @@ class AddOrder : public BaseAction {
             Order* newOrd = new Order (wareHouse.getOrderCounter(), customerId,
              wareHouse.getCustomer(customerId).getCustomerDistance());
             wareHouse.addOrder(newOrd);
-            delete newOrd;
             }else
             error("Cannot place this order");
 
@@ -109,14 +106,13 @@ class AddCustomer : public BaseAction {
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override{ 
-            if (customerType==CustomerType::Civilian)
-                CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
+            CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
                  customerName, distance, maxOrders);
-            else    SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
-                 customerName, distance, maxOrders);
-        
-
-
+            if (customerType==CustomerType::Soldier){
+                delete cos;
+                SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
+                 customerName, distance, maxOrders);}
+            wareHouse.addCustomer(cos);
         }
         AddCustomer *clone() const override{return new AddCustomer(*this);}
         string toString() const override {return "customer "+ customerName + CTToString(customerType)
@@ -127,6 +123,66 @@ class AddCustomer : public BaseAction {
         const int distance;
         const int maxOrders;
 };
+
+
+class AddVolunteer : public BaseAction {
+
+public:
+        AddVolunteer(string _name, string _volunteerType, int _coolDown,  int _maxOrders, int _maxDistance, int _distancePerStep):
+        name{name}, volunteerType{_volunteerType}, cooldown{_coolDown}, maxOrders{_maxOrders}, 
+        maxDistance{_maxDistance}, distancePerStep{_distancePerStep}{};
+        void act(WareHouse &wareHouse) override{ 
+            CollectorVolunteer* vol =new CollectorVolunteer(wareHouse.getVolunteerCounter()
+            , name, cooldown);
+        
+         if (volunteerType=="limited_collector"){
+            delete vol;
+            LimitedCollectorVolunteer* vol = new LimitedCollectorVolunteer(wareHouse.getVolunteerCounter()
+            , name, cooldown, maxOrders);
+         }
+        
+        if (volunteerType=="driver"){
+            delete vol;
+            DriverVolunteer* vol = new DriverVolunteer(wareHouse.getVolunteerCounter(),
+             name, maxDistance, distancePerStep);
+
+        }
+        
+        if (volunteerType=="limited_ driver"){
+            delete vol;
+            LimitedDriverVolunteer* vol = new LimitedDriverVolunteer(wareHouse.getVolunteerCounter(),
+             name, maxDistance, distancePerStep, maxOrders);}
+             
+            wareHouse.addVolunteer(vol);}
+            
+
+
+        AddVolunteer *clone() const override {return new AddVolunteer(*this);}
+        string toString() const override {string s = "volunteer " +name + " "+ volunteerType + " ";
+        if (volunteerType=="collector")
+            s= s + std::to_string(cooldown);
+        
+         if (volunteerType=="limited_collector")
+            s= s + std::to_string(cooldown) +" "+ std::to_string(maxOrders);
+        
+        if (volunteerType=="driver")
+            s= s + std::to_string(maxDistance) +" "+ std::to_string(distancePerStep);
+        
+        if (volunteerType=="limited_ driver")
+            s= s + std::to_string(maxDistance) +" "+ std::to_string( distancePerStep) 
+            +" "+ std::to_string(maxOrders);
+        
+        }
+
+    private:
+        const string name;
+        const string volunteerType;
+        const int cooldown;
+        const int maxOrders;
+        const int maxDistance;
+        const int distancePerStep;
+};
+        
 
 
 
@@ -268,11 +324,9 @@ class Close : public BaseAction {
 class BackupWareHouse : public BaseAction {
     public:
         BackupWareHouse();
-        void act(WareHouse &wareHouse) override{
-            backup = &wareHouse;
-        };
-        BackupWareHouse *clone() const override{ return new BackupWareHouse(*this);};
-        string toString() const override{ return "backup";};
+        void act(WareHouse &wareHouse) override;
+        BackupWareHouse *clone() const override;
+        string toString() const override;
     private:
 };
 
@@ -280,15 +334,7 @@ class BackupWareHouse : public BaseAction {
 class RestoreWareHouse : public BaseAction {
     public:
         RestoreWareHouse();
-        void act(WareHouse &wareHouse) override{
-            if (backup== nullptr){
-                error("No backup available");
-            }
-            else{
-////            warehouse.restoreFromBackup(*backup);
-
-            }
-        };
+        void act(WareHouse &wareHouse) override;
         RestoreWareHouse *clone() const override;
         string toString() const override;
     private:
