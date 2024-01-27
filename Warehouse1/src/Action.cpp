@@ -5,7 +5,7 @@
 #include "../include/WareHouse.h"
 #include "../include/Customer.h"
 class volunteer;
-#include "Volunteer.h"
+#include "../include/Volunteer.h"
 class customer;
 using std::string;
 using std::vector;
