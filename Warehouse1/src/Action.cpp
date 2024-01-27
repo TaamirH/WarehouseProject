@@ -8,9 +8,11 @@ class volunteer;
 #include "../include/Volunteer.h"
 #include "../include/Action.h"
 class customer;
+class warehouse;
 using std::string;
 using std::vector;
 #define NULL ((void*)0)
+extern WareHouse* backup;
 
 enum class ActionStatus{
     COMPLETED, ERROR
@@ -107,13 +109,14 @@ class AddCustomer : public BaseAction {
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override{ 
-            CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
+            if (customerType==CustomerType::Civilian)
+                CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
                  customerName, distance, maxOrders);
-            if (customerType==CustomerType::Soldier){
-                delete cos;
-                SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
-                 customerName, distance, maxOrders);}
-            wareHouse.addCustomer(cos);
+            else    SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
+                 customerName, distance, maxOrders);
+        
+
+
         }
         AddCustomer *clone() const override{return new AddCustomer(*this);}
         string toString() const override {return "customer "+ customerName + CTToString(customerType)
@@ -124,7 +127,6 @@ class AddCustomer : public BaseAction {
         const int distance;
         const int maxOrders;
 };
-
 
 
 
@@ -266,9 +268,11 @@ class Close : public BaseAction {
 class BackupWareHouse : public BaseAction {
     public:
         BackupWareHouse();
-        void act(WareHouse &wareHouse) override;
-        BackupWareHouse *clone() const override;
-        string toString() const override;
+        void act(WareHouse &wareHouse) override{
+            backup = &wareHouse;
+        };
+        BackupWareHouse *clone() const override{ return new BackupWareHouse(*this);};
+        string toString() const override{ return "backup";};
     private:
 };
 
@@ -276,7 +280,15 @@ class BackupWareHouse : public BaseAction {
 class RestoreWareHouse : public BaseAction {
     public:
         RestoreWareHouse();
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &wareHouse) override{
+            if (backup== nullptr){
+                error("No backup available");
+            }
+            else{
+//            warehouse.restoreFromBackup(*backup);
+
+            }
+        };
         RestoreWareHouse *clone() const override;
         string toString() const override;
     private:
