@@ -107,14 +107,13 @@ class AddCustomer : public BaseAction {
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
         void act(WareHouse &wareHouse) override{ 
-            if (customerType==CustomerType::Civilian)
-                CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
+            CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
                  customerName, distance, maxOrders);
-            else    SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
-                 customerName, distance, maxOrders);
-        
-
-
+            if (customerType==CustomerType::Soldier){
+                delete cos;
+                SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
+                 customerName, distance, maxOrders);}
+            wareHouse.addCustomer(cos);
         }
         AddCustomer *clone() const override{return new AddCustomer(*this);}
         string toString() const override {return "customer "+ customerName + CTToString(customerType)

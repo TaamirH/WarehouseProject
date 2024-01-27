@@ -164,9 +164,15 @@ class WareHouse {
         };
         void addOrder(Order* order){
             pendingOrders.push_back(order);
+            orderCounter++;
         };
+         
         void addAction(BaseAction* action){
             actionsLog.push_back(action);
+        };
+        void addCustomer(Customer* customer){
+            customers.push_back(customer);
+            customerCounter++;
         };
         void printActionsLogs(){
             for (auto* action: actionsLog){

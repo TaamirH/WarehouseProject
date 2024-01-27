@@ -42,7 +42,11 @@ class CollectorVolunteer: public Volunteer {
         CollectorVolunteer(int _id, const string &_name, int _coolDown):
         Volunteer(_id, _name),coolDown{_coolDown}{};
         CollectorVolunteer *clone() const override{return new CollectorVolunteer(*this);}
-        void step() override;
+        void step() override{if(decreaseCoolDown){
+            completedOrderId = activeOrderId;
+            activeOrderId = NO_ORDER;
+        }}
+        
         int getCoolDown() const{return coolDown;}
         int getTimeLeft() const{return timeLeft;}
         bool decreaseCoolDown(){timeLeft--;
@@ -103,7 +107,11 @@ class DriverVolunteer: public Volunteer {
         void acceptOrder(const Order &order) override {setDistanceLeft (order.getDistance());
         activeOrderId = order.getId();
         } // Assign distanceLeft to order's distance
-        void step() override; // Decrease distanceLeft by distancePerStep
+        void step() override{if(decreaseDistanceLeft){
+            completedOrderId = activeOrderId;
+            activeOrderId = NO_ORDER;
+        }
+        } // Decrease distanceLeft by distancePerStep
         string toString() const override {int md = getMaxDistance();int dps = getDistancePerStep();
             return "volunteer " + getName() + " driver " + std::to_string(md) +std::to_string(dps);}
          void setDistanceLeft(int i) {distanceLeft=i;}
