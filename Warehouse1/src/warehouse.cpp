@@ -158,6 +158,54 @@ class WareHouse {
             open();
             parseFile(configFilePath);
         };
+        WareHouse(WareHouse &other):
+            isOpen(other.isOpen),customerCounter(other.customerCounter),
+            volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
+            for (auto* volunteer:other.volunteers){
+                volunteers.push_back(volunteer->clone());
+            }
+            for (auto* pendingorder:other.pendingOrders){
+                pendingOrders.push_back(pendingorder->clone());
+            }
+            for (auto* inproccesorder:other.inProcessOrders){
+                inProcessOrders.push_back(inproccesorder->clone());
+            }
+            for (auto* completedorder:other.completedOrders){
+                completedOrders.push_back(completedorder->clone());
+            }
+            for (auto* customer:other.customers){
+                customers.push_back(customer->clone());
+            }
+        }
+        WareHouse &operator=(const WareHouse &other){
+            if (this!= &other){
+                isOpen=other.isOpen;
+                customerCounter=other.customerCounter;
+                volunteerCounter=other.volunteerCounter;
+                orderCounter=other.orderCounter;
+                volunteers.clear();
+                pendingOrders.clear();
+                inProcessOrders.clear();
+                completedOrders.clear();
+                customers.clear();
+                for (auto* volunteer:other.volunteers){
+                    volunteers.push_back(volunteer->clone());
+            }
+                for (auto* pendingorder:other.pendingOrders){
+                    pendingOrders.push_back(pendingorder->clone());
+            }
+                for (auto* inproccesorder:other.inProcessOrders){
+                    inProcessOrders.push_back(inproccesorder->clone());
+            }
+                for (auto* completedorder:other.completedOrders){
+                    completedOrders.push_back(completedorder->clone());
+            }
+                for (auto* customer:other.customers){
+                    customers.push_back(customer->clone());
+            }
+            }
+        }
+        
         void start();
         const vector<BaseAction*> &getActionsLog() const{
             return actionsLog;
@@ -174,12 +222,6 @@ class WareHouse {
             customers.push_back(customer);
             customerCounter++;
         };
-
-        void addVolunteer (Volunteer* volunteer){
-            volunteers.push_back(volunteer);
-            volunteerCounter++;
-        }
-
         void printActionsLogs(){
             for (auto* action: actionsLog){
                 if ((*action).getStatus()==ActionStatus::COMPLETED){

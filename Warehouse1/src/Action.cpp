@@ -334,7 +334,15 @@ class BackupWareHouse : public BaseAction {
 class RestoreWareHouse : public BaseAction {
     public:
         RestoreWareHouse();
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &wareHouse) override{
+            if (backup== nullptr){
+                error("No backup available");
+            }
+            else{
+////            warehouse.restoreFromBackup(*backup);
+
+            }
+        };
         RestoreWareHouse *clone() const override;
         string toString() const override;
     private:

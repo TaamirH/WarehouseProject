@@ -18,6 +18,7 @@ class WareHouse {
         std::string trimLeadingWhitespace(const std::string &str);
         void parseFile(const string &filePath);
         WareHouse(const string &configFilePath);
+        WareHouse(WareHouse &other);
         void start();
         void addOrder(Order* order);
         void addAction(BaseAction* action);
