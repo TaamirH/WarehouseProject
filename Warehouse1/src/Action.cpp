@@ -285,7 +285,7 @@ class RestoreWareHouse : public BaseAction {
                 error("No backup available");
             }
             else{
- //               wareHouse=backup;
+                wareHouse=*backup;
                         }
         };
         RestoreWareHouse *clone() const override;
