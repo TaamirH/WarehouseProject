@@ -6,6 +6,7 @@
 #include "../include/Customer.h"
 class volunteer;
 #include "../include/Volunteer.h"
+#include "../include/Action.h"
 class customer;
 using std::string;
 using std::vector;
