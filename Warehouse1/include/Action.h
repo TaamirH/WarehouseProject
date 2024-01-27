@@ -70,6 +70,21 @@ class AddCustomer : public BaseAction {
         const int maxOrders;
 };
 
+class AddVolunteer : public BaseAction {
+    public:
+        AddVolunteer(string name, string volunteerType, int coolDown,  int maxOrders, int maxDistance, int distancePerStep);
+        void act(WareHouse &wareHouse) override;
+        AddVolunteer *clone() const override;
+        string toString() const override;
+    private:
+        const string name;
+        const string volunteerType;
+        const int cooldown;
+        const int maxOrders;
+        const int maxDistance;
+        const int distancePerStep;
+};
+
 
 
 class PrintOrderStatus : public BaseAction {
