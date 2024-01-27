@@ -317,17 +317,19 @@ class Close : public BaseAction {
     public:
         Close();
         void act(WareHouse &wareHouse) override;
-        Close *clone() const override;
-        string toString() const override;
+        Close *clone() const override{return new Close(*this);};
+        string toString() const override{return "close";};
     private:
 };
 
 class BackupWareHouse : public BaseAction {
     public:
         BackupWareHouse();
-        void act(WareHouse &wareHouse) override;
-        BackupWareHouse *clone() const override;
-        string toString() const override;
+        void act(WareHouse &wareHouse) override{
+            backup = &wareHouse;
+        };
+        BackupWareHouse *clone() const override{return new BackupWareHouse(*this);};
+        string toString() const override{return "backup";};
     private:
 };
 
@@ -343,7 +345,7 @@ class RestoreWareHouse : public BaseAction {
                 wareHouse=*backup;
                         }
         };
-        RestoreWareHouse *clone() const override;
-        string toString() const override;
+        RestoreWareHouse *clone() const override{return new RestoreWareHouse(*this);};
+        string toString() const override{return "restore";};
     private:
 };

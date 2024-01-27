@@ -19,6 +19,8 @@ class WareHouse {
         void parseFile(const string &filePath);
         WareHouse(const string &configFilePath);
         WareHouse(WareHouse &other);
+        WareHouse &operator=(const WareHouse &other);
+        ~WareHouse();
         void start();
         void addOrder(Order* order);
         void addAction(BaseAction* action);

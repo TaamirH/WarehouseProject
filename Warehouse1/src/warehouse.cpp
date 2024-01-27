@@ -161,6 +161,9 @@ class WareHouse {
         WareHouse(WareHouse &other):
             isOpen(other.isOpen),customerCounter(other.customerCounter),
             volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
+            for (auto* action:other.actionsLog){
+                actionsLog.push_back(action->clone());
+            }    
             for (auto* volunteer:other.volunteers){
                 volunteers.push_back(volunteer->clone());
             }
@@ -183,11 +186,15 @@ class WareHouse {
                 customerCounter=other.customerCounter;
                 volunteerCounter=other.volunteerCounter;
                 orderCounter=other.orderCounter;
+                actionsLog.clear();
                 volunteers.clear();
                 pendingOrders.clear();
                 inProcessOrders.clear();
                 completedOrders.clear();
                 customers.clear();
+                for (auto* actionlog:other.actionsLog){
+                    actionsLog.push_back(actionlog->clone());
+                }
                 for (auto* volunteer:other.volunteers){
                     volunteers.push_back(volunteer->clone());
             }
@@ -205,7 +212,55 @@ class WareHouse {
             }
             }
         }
-        
+        ~WareHouse(){
+            for (auto* actionlog:actionsLog){
+                delete actionlog;
+            }
+            for (auto* volunteer:volunteers){
+                delete volunteer;
+            }
+            for (auto* pendingorder:pendingOrders){
+                delete pendingorder;
+            }
+            for (auto* inproccessorder:inProcessOrders){
+                delete inproccessorder;
+            }
+            for (auto* completedorder:completedOrders){
+                delete completedorder;
+            }
+            for (auto* customer:customers){
+                delete customer;
+            }        
+            }
+        WareHouse(WareHouse &&other) noexcept :
+            isOpen(other.isOpen),
+            customerCounter(other.customerCounter),
+            volunteerCounter(other.volunteerCounter),
+            orderCounter(other.orderCounter),
+            actionsLog(std::move(other.actionsLog)),  // Move containers directly
+            volunteers(std::move(other.volunteers)),
+            pendingOrders(std::move(other.pendingOrders)),
+            inProcessOrders(std::move(other.inProcessOrders)),
+            completedOrders(std::move(other.completedOrders)),
+            customers(std::move(other.customers)) {}
+
+    WareHouse& operator=(WareHouse &&other) noexcept {  // Correct declaration
+        if (this != &other) {
+        // Move basic members
+            isOpen = other.isOpen;
+            customerCounter = other.customerCounter;
+            volunteerCounter = other.volunteerCounter;
+            orderCounter = other.orderCounter;
+        // Move containers directly
+            actionsLog = std::move(other.actionsLog);
+            volunteers = std::move(other.volunteers);
+            pendingOrders = std::move(other.pendingOrders);
+            inProcessOrders = std::move(other.inProcessOrders);
+            completedOrders = std::move(other.completedOrders);
+            customers = std::move(other.customers);
+        }
+        return *this;
+        }
         void start();
         const vector<BaseAction*> &getActionsLog() const{
             return actionsLog;
