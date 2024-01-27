@@ -285,7 +285,7 @@ class RestoreWareHouse : public BaseAction {
                 error("No backup available");
             }
             else{
-//            warehouse.restoreFromBackup(*backup);
+////            warehouse.restoreFromBackup(*backup);
 
             }
         };
