@@ -518,7 +518,11 @@ class WareHouse {
             }
 
 
-            }
+        }
+        void deleteVol(Volunteer* vol){
+            auto it = std::find(volunteers.begin(), volunteers.end(),vol);
+            volunteers.erase(it);
+        }
         
     private:
         bool isOpen;
