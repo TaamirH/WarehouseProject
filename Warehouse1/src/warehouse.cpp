@@ -246,7 +246,7 @@ class WareHouse {
 
     WareHouse& operator=(WareHouse &&other) noexcept {  // Correct declaration
         if (this != &other) {
-        // Move basic members
+        //// Move basic members
             isOpen = other.isOpen;
             customerCounter = other.customerCounter;
             volunteerCounter = other.volunteerCounter;
@@ -323,7 +323,9 @@ class WareHouse {
             return volunteerCounter;}
         int getOrderCounter() const{
             return orderCounter;}
-        void close();
+        void close(){
+            isOpen=false;
+        };
         void open(){
             isOpen=true;
         };
