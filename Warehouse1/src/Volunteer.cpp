@@ -53,7 +53,8 @@ class CollectorVolunteer: public Volunteer {
         bool decreaseCoolDown(){timeLeft--;
         return getTimeLeft==0;}        //Decrease timeLeft by 1,return true if timeLeft=0,false otherwise
         bool hasOrdersLeft() const override {return true;}
-        bool canTakeOrder(const Order &order) const override {return !this->isBusy();}
+        bool canTakeOrder(const Order &order) const override {return !this->isBusy()
+         && order.getStatus()==OrderStatus::PENDING;}
         void acceptOrder(const Order &order) override{timeLeft= getCoolDown();
         activeOrderId = order.getId();
         }
@@ -73,7 +74,8 @@ class LimitedCollectorVolunteer: public CollectorVolunteer {
         CollectorVolunteer(_id, _name, _coolDown), maxOrders{_maxOrders}{};
         LimitedCollectorVolunteer *clone() const override {return new LimitedCollectorVolunteer(*this);}
         bool hasOrdersLeft() const override{return ordersLeft!=0;}
-        bool canTakeOrder(const Order &order) const override{return !this->isBusy() && hasOrdersLeft;};
+        bool canTakeOrder(const Order &order) const override{return !this->isBusy() && hasOrdersLeft 
+        && order.getStatus()==OrderStatus::PENDING;};
         void acceptOrder(const Order &order) override{ordersLeft--;
         activeOrderId = order.getId();
         }
@@ -106,7 +108,8 @@ class DriverVolunteer: public Volunteer {
                 //Decrease distanceLeft by distancePerStep,return true if distanceLeft<=0,false otherwise
         bool hasOrdersLeft() const override {return true;}
         bool canTakeOrder(const Order &order) const override
-        {return !this->isBusy() && order.getDistance()<=getMaxDistance();}; // Signal if the volunteer is not busy and the order is within the maxDistance
+        {return !this->isBusy() && order.getDistance()<=getMaxDistance() &&
+         order.getStatus()==OrderStatus::COLLECTING;}; // Signal if the volunteer is not busy and the order is within the maxDistance
         void acceptOrder(const Order &order) override {setDistanceLeft (order.getDistance());
         activeOrderId = order.getId();
         } // Assign distanceLeft to order's distance
@@ -138,9 +141,11 @@ class LimitedDriverVolunteer: public DriverVolunteer {
         int getNumOrdersLeft() const {return ordersLeft;}
         bool hasOrdersLeft() const override{return ordersLeft>0;}
         bool canTakeOrder(const Order &order) const override
-         {return !this->isBusy() && order.getDistance()<=getMaxDistance();}
+         {return !this->isBusy() && order.getDistance()<=getMaxDistance() && hasOrdersLeft()
+         && order.getStatus()==OrderStatus::COLLECTING;}
         // Signal if the volunteer is not busy, the order is within the maxDistance.
-        void acceptOrder(const Order &order) override {ordersLeft--;setDistanceLeft(order.getDistance());
+        void acceptOrder(const Order &order) override {ordersLeft--;
+        setDistanceLeft(order.getDistance());
         activeOrderId = order.getId();}
         // Assign distanceLeft to order's distance and decrease ordersLeft
         string toString() const override {int md = getMaxDistance();int dps = getDistancePerStep(); int mo = getMaxOrders();

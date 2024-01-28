@@ -51,20 +51,30 @@ class BaseAction{
 class SimulateStep : public BaseAction {
 
     public:
-        SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}//need to complete;
+        SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}
+
         void act(WareHouse &wareHouse) override{
-            stack<Volunteer> avelablleVol;
+            stack<Order> orders;
+            
             for (auto* vol : wareHouse.getVolunteers()){
-                
-
-                if(!(dynamic_cast<CollectorVolunteer*>(vol)==nullptr)&&vol->canTakeOrder)       //is a collector volunteer && vol->canTakeOrder())
-                    avelablleVol
-                
-            }
-            for (Order *pend : wareHouse.getPendingOrders()){
-                if ()
-            }
-
+                for (Order* ord : wareHouse.getPendingOrders()){
+                    if(vol->canTakeOrder(*ord)){
+                    
+                        vol->acceptOrder( *ord);
+                        ord->setCollectorId(vol->getId());
+                        ord->setStatus(OrderStatus::COLLECTING);
+                        wareHouse.moveOrder(*ord, vol->getId());
+                    }
+                }}  
+                for (auto* vol : wareHouse.getVolunteers()){
+                    int activeO = vol->getActiveOrderId();
+                    vol->step();
+                    if (activeO==vol->getCompletedOrderId() ){
+                        wareHouse.moveorder(*wareHouse.getOrder(activeO), 0);
+                        // if (!vol->canTakeOrder())
+                        //     wareHouse.deleteVol(vol);
+                    }
+                }
         }
         
     
