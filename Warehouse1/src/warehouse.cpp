@@ -261,7 +261,45 @@ class WareHouse {
         }
         return *this;
         }
-        void start();
+        void start(){
+            open();
+            while (isOpen){
+                std::cout << "What do you want to do? ";
+                std::string input;
+                std::getline(std::cin, input);  // Read entire line of input    
+                std::stringstream ss(input);
+                std::vector<std::string> tokens;
+                std::string token;
+                while (std::getline(ss, token, ' ')) {
+                    tokens.push_back(token);
+                }
+
+                if (tokens.empty()) {
+                    std::cout << "Invalid input: no command specified\n";
+                    continue;
+                }
+
+                if (tokens[0] == "step") {
+                    int numberOfSteps = std::stoi(tokens[1]);
+                    BaseAction* action = new StepAction(numberOfSteps);  // Create using new
+                    action->act();
+                    delete action;  // Manually delete after use
+                } else if (tokens[0] == "order") {
+                    int customerId = std::stoi(tokens[1]);
+                    BaseAction* action = new AddOrder(customerId);  // Create using new
+                    action->act();
+                    delete action;  // Manually delete after use
+                }
+
+        // ... (handle other commands similarly with nested if statements)
+
+                else {
+                    std::cout << "Invalid command: " << tokens[0] << "\n";
+                }
+            }   
+                
+
+        };
         const vector<BaseAction*> &getActionsLog() const{
             return actionsLog;
         };
@@ -325,9 +363,11 @@ class WareHouse {
             return orderCounter;}
         void close(){
             isOpen=false;
+            cout <<"Warehouse is Closed!";
         };
         void open(){
             isOpen=true;
+            cout <<"Warehouse is Open!";
         };
 
     private:
