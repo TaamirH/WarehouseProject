@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "WareHouse.h"
+class WareHouse;
 using std::string;
 using std::vector;
 

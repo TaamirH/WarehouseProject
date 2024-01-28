@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-class wareHouse;
+class WareHouse;
 #include "../include/Customer.h"
 class volunteer;
 #include "../include/Volunteer.h"
