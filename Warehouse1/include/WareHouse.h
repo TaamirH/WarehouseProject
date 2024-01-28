@@ -40,10 +40,9 @@ class WareHouse {
         vector <Order*> &getProcessingOrders () const;
         vector <Order*> &getCompletedOrders () const;
         vector <Volunteer*> &getVolunteers () const;
-
         void close();
         void open();
-
+        void moveOrder(Order *order,int id);
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;
