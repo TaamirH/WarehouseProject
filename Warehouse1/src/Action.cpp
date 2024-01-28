@@ -1,8 +1,7 @@
-#pragma once
 #include <string>
 #include <iostream>
 #include <vector>
-#include "../include/WareHouse.h"
+class wareHouse;
 #include "../include/Customer.h"
 class volunteer;
 #include "../include/Volunteer.h"

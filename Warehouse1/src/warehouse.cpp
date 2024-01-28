@@ -1,4 +1,3 @@
-#pragma once
 #include <string>
 #include <vector>
 #include <iostream>
@@ -9,8 +8,6 @@
 #include "../include/Customer.h"
 #include "../include/Volunteer.h"
 #include "../include/Action.h"
-#define NULL __null
-#define NULL ((void*)0)
 
 
 
@@ -492,7 +489,37 @@ class WareHouse {
             isOpen=true;
             cout <<"Warehouse is Open!";
         };
+        void moveOrder(Order *order,int id){
+            OrderStatus status=order->getStatus();
+            if (status==OrderStatus::PENDING){
+                order->setStatus(OrderStatus::COLLECTING);
+                order->setCollectorId(id);
+                auto it = std::find(pendingOrders.begin(), pendingOrders.end(), order);
+                pendingOrders.erase(it);
+                inProcessOrders.push_back(order);
+            }
+            else if (status==OrderStatus::COLLECTING){
+                auto it = std::find(inProcessOrders.begin(), inProcessOrders.end(), order);
+                if (it != inProcessOrders.end()) {
+                    inProcessOrders.erase(it);
+                    pendingOrders.push_back(order);}
+                else{
+                    order->setDriverId(id);
+                    auto it = std::find(pendingOrders.begin(), pendingOrders.end(), order);
+                    pendingOrders.erase(it);
+                    inProcessOrders.push_back(order);
+                }
+            }
+            else if (status==OrderStatus::DELIVERING){
+                order->setStatus(OrderStatus::COMPLETED);
+                auto it = std::find(inProcessOrders.begin(), inProcessOrders.end(), order);
+                inProcessOrders.erase(it);
+                completedOrders.push_back(order);
+            }
 
+
+            }
+        
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;

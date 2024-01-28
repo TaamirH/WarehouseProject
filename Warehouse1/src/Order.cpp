@@ -1,4 +1,3 @@
-#pragma once
 
 #include <string>
 #include <vector>
@@ -30,7 +29,7 @@ class Order {
         int getCollectorId() const{return collectorId;}
         int getDriverId() const{return driverId;}
         OrderStatus getStatus() const{return status;}
-        const string toString() const;
+        const string toString() const;//to complete
         int getDistance() const {return distance;}
         Order *clone() const {return new Order(*this);}
 
