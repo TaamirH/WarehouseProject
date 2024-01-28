@@ -28,6 +28,7 @@ class WareHouse {
         void addAction(BaseAction* action);
         void addCustomer(Customer* customer);
         void addVolunteer (Volunteer* volunteer);
+        void printActionsLogs();
         Customer &getCustomer(int customerId) const;
         Volunteer &getVolunteer(int volunteerId) const;
         Order &getOrder(int orderId) const;
