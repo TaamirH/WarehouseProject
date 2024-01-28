@@ -11,6 +11,8 @@ class customer;
 using std::string;
 using std::vector;
 extern WareHouse* backup;
+#include <stack>;
+using namespace std;
 //
 enum class ActionStatus{
     COMPLETED, ERROR
@@ -50,7 +52,20 @@ class SimulateStep : public BaseAction {
 
     public:
         SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}//need to complete;
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &wareHouse) override{
+            stack<Volunteer> avelablleVol;
+            for (auto* vol : wareHouse.getVolunteers()){
+                
+
+                if(!(dynamic_cast<CollectorVolunteer*>(vol)==nullptr)&&vol->canTakeOrder)       //is a collector volunteer && vol->canTakeOrder())
+                    avelablleVol
+                
+            }
+            for (Order *pend : wareHouse.getPendingOrders()){
+                if ()
+            }
+
+        }
         
     
         std::string toString() const override{return "step " + std::to_string(numOfSteps);}
@@ -285,29 +300,35 @@ class PrintVolunteerStatus : public BaseAction {
                 std::cout<< "\n isBusy: False \n None \n None";
             else std::cout<<"\n isBusy: True \nOrderId: " + std::to_string(vol.getActiveOrderId());
             
-             if (!(dynamic_cast<CollectorVolunteer*>(&vol)==nullptr)){         //is a collector volunteer
+             if (vol.whoAmI()==0){         //is a collector volunteer
                  CollectorVolunteer* cv = dynamic_cast <CollectorVolunteer*>(&vol);
                  if (busy)
-                   std::cout<<"\nTimeLeft: "+  std::to_string(cv->getTimeLeft());
+                   std::cout<<"\nTimeLeft: "+  std::to_string(cv->getTimeLeft()) + "OrdersLeft: No Limit";
                 delete cv;
-                if (!(dynamic_cast<LimitedCollectorVolunteer*>(&vol)==nullptr)){         //is a limited collector volunteer
-                    LimitedCollectorVolunteer* lcv = dynamic_cast <LimitedCollectorVolunteer*>(&vol);
-                    std::cout<<"Ordersleft: " + std::to_string(lcv->getActiveOrderId());
-                    delete lcv;
-                }
-                else std::cout<<"No Limit";
-                
              }
-             else{//is a driver volunteer
+            else if (vol.whoAmI()==1){         //is a limited collector volunteer
+                    LimitedCollectorVolunteer* lcv = dynamic_cast <LimitedCollectorVolunteer*>(&vol);
+                        if(busy)
+                    std::cout<<"\nTimeLeft: "+  std::to_string(lcv->getTimeLeft());
+                    std::cout<<"\nOrdersleft: " + std::to_string(lcv->getActiveOrderId());
+                    delete lcv;
+             }
+                
+             else if (vol.whoAmI()==2){//is a driver volunteer
                 DriverVolunteer* dv = dynamic_cast <DriverVolunteer*>(&vol);
                 if(busy)
                     std::cout<<"\nDistanceLeft: "+  std::to_string(dv->getDistanceLeft());
                 delete dv;
-                if (!(dynamic_cast<LimitedDriverVolunteer*>(&vol)==nullptr)){         //is a limited Driver volunteer
+                std::cout<<"\nOrders Left: No Limit";
+             }
+            else {         //is a limited Driver volunteer
                     LimitedDriverVolunteer* ldv = dynamic_cast <LimitedDriverVolunteer*>(&vol);
-                    std::cout<<"Ordersleft: " + std::to_string(ldv->getActiveOrderId());
+                        if(busy)
+                    std::cout<<"\nDistanceLeft: "+  std::to_string(ldv->getDistanceLeft());
+                    std::cout<<"\nOrdersleft: " + std::to_string(ldv->getActiveOrderId());
                     delete ldv;
-                }  else std::cout<<"No Limit"; }
+                } 
+            
                 complete();
             }
                 _wareHouse.addAction(this);

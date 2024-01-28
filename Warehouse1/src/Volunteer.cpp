@@ -24,6 +24,7 @@ class Volunteer {
 
         virtual string toString() const = 0;
         virtual Volunteer* clone() const = 0; //Return a copy of the volunteer
+        virtual int whoAmI () const = 0;
 
     protected:
         int completedOrderId; //Initialized to NO_ORDER if no order has been completed yet
@@ -58,6 +59,7 @@ class CollectorVolunteer: public Volunteer {
         }
         string toString() const override {int cd = getCoolDown();
             return "volunteer " + getName() + " collector " + std::to_string(cd);}
+        int whoAmI() const override {return 0;}
     
     private:
         const int coolDown; // The time it takes the volunteer to process an order
@@ -80,6 +82,7 @@ class LimitedCollectorVolunteer: public CollectorVolunteer {
         int getNumOrdersLeft() const{return ordersLeft;}
         string toString() const override {int cd = getCoolDown();int mo = getMaxOrders();
             return "volunteer " + getName() + " limited_collector " + std::to_string(cd) +std::to_string(mo);}
+        int whoAmI()const override{return 1;}
     
     
     private:
@@ -115,6 +118,7 @@ class DriverVolunteer: public Volunteer {
         string toString() const override {int md = getMaxDistance();int dps = getDistancePerStep();
             return "volunteer " + getName() + " driver " + std::to_string(md) +std::to_string(dps);}
          void setDistanceLeft(int i) {distanceLeft=i;}
+         int whoAmI()const override{return 2;}
 
     
 
@@ -141,6 +145,7 @@ class LimitedDriverVolunteer: public DriverVolunteer {
         // Assign distanceLeft to order's distance and decrease ordersLeft
         string toString() const override {int md = getMaxDistance();int dps = getDistancePerStep(); int mo = getMaxOrders();
             return "volunteer " + getName() + " driver_limited " + std::to_string(md) +std::to_string(dps)+std::to_string(mo);}
+        int whoAmI() const override{return 3;}
     
 
     private:

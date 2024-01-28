@@ -36,6 +36,11 @@ class WareHouse {
         int getCustomerCounter() const;
         int getVolunteerCounter() const;
         int getOrderCounter() const;
+        vector <Order*> &getPendingOrders () const;
+        vector <Order*> &getProcessingOrders () const;
+        vector <Order*> &getCompletedOrders () const;
+        vector <Volunteer*> &getVolunteers () const;
+
         void close();
         void open();
 

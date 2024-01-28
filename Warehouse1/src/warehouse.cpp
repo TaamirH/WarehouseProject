@@ -356,8 +356,6 @@ class WareHouse {
         }
     }
 
-    //return nullptr ;
-    // Handle the case where the order is not found
     throw std::runtime_error("Order not found"); // Or return a nullptr if preferred
 
         };
@@ -367,6 +365,12 @@ class WareHouse {
             return volunteerCounter;}
         int getOrderCounter() const{
             return orderCounter;}
+
+        vector <Order*> getPendingOrders () const{return pendingOrders;}
+        vector <Order*> getProcessingOrders () const {return inProcessOrders;}
+        vector <Order*> getCompletedOrders () const{return completedOrders;}
+        vector <Volunteer*> getVolunteers () const{return volunteers;}
+        
         void close(){
             isOpen=false;
             cout <<"Warehouse is Closed!";
