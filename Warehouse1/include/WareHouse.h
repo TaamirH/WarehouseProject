@@ -44,6 +44,7 @@ class WareHouse {
         void close();
         void open();
         void moveOrder(Order *order,int id);
+        void deleteVol (Volunteer *vol);
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;

@@ -499,7 +499,7 @@ class WareHouse {
                 inProcessOrders.push_back(order);
             }
             else if (status==OrderStatus::COLLECTING){
-                auto it = std::find(inProcessOrders.begin(), inProcessOrders.end(), order);
+                 it = std::find(inProcessOrders.begin(), inProcessOrders.end(), order);
                 if (it != inProcessOrders.end()) {
                     inProcessOrders.erase(it);
                     pendingOrders.push_back(order);}
