@@ -281,23 +281,136 @@ class WareHouse {
 
                 if (tokens[0] == "step") {
                     int numberOfSteps = std::stoi(tokens[1]);
-                    BaseAction* action = new StepAction(numberOfSteps);  // Create using new
-                    action->act();
+                    BaseAction* action = new SimulateStep(numberOfSteps);  // Create using new
+                    action->act(*this);
                     delete action;  // Manually delete after use
                 } else if (tokens[0] == "order") {
                     int customerId = std::stoi(tokens[1]);
                     BaseAction* action = new AddOrder(customerId);  // Create using new
-                    action->act();
+                    action->act(*this);
                     delete action;  // Manually delete after use
                 }
+                else if (tokens[0] == "customer") {
+                    if (tokens.size() < 5) {
+                        std::cout << "Invalid input: missing customer arguments\n";
+                    } else {
+                        try {
+                            std::string customerName = tokens[1];
+                            std::string customerType = tokens[2];
+                            int customerDistance = std::stoi(tokens[3]);
+                            int maxOrders = std::stoi(tokens[4]);
+                            BaseAction* action = new AddCustomer(customerName, customerType, customerDistance, maxOrders);
+                            action->act(*this);
+                            delete action;    
+                        } catch (std::invalid_argument& e) {
+                            std::cout << "Invalid input: customer arguments must be strings and integers\n";
+                        }
+                    }
+                }
+                else if (tokens[0] == "volunteer") {
+                    if (tokens.size() < 3) {
+                        std::cout << "Invalid input: missing volunteer name and type\n";
+                    } else {
+                        std::string volunteerName = tokens[1];
+                        std::string volunteerType = tokens[2];
 
-        // ... (handle other commands similarly with nested if statements)
+                        // Determine argument parsing based on volunteer type
+                        if (volunteerType == "collector" || volunteerType == "limited_collector") {
+                            int coolDown = 0;
+                            int maxOrders = 0;
+                            if (tokens.size() >= 4) {
+                                try {
+                                    coolDown = std::stoi(tokens[3]);
+                                } catch (std::invalid_argument& e) {
+                                    std::cout << "Invalid input: cooldown must be an integer\n";
+                                }
+                            }
+                            if (tokens.size() >= 5 && volunteerType == "limited_collector") {
+                                try {
+                                    maxOrders = std::stoi(tokens[4]);
+                                } catch (std::invalid_argument& e) {
+                                    std::cout << "Invalid input: maxOrders must be an integer\n";
+                                }
+                            }
+                            BaseAction* action = new AddVolunteer(volunteerName, volunteerType, coolDown, maxOrders, 0, 0);  // Set maxDistance and distancePerStep to 0 for collectors
+            // ...
+                        } else if (volunteerType == "driver" || volunteerType == "limited_driver") {
+                            int maxDistance = 0;
+                            int distancePerStep = 0;
+                            int maxOrders = 0;
+                            if (tokens.size() >= 4) {
+                                try {
+                                    maxDistance = std::stoi(tokens[3]);
+                                } catch (std::invalid_argument& e) {
+                                    std::cout << "Invalid input: maxDistance must be an integer\n";
+                                }
+                            }
+                            if (tokens.size() >= 5) {
+                                try {
+                                    distancePerStep = std::stoi(tokens[4]);
+                                } catch (std::invalid_argument& e) {
+                                    std::cout << "Invalid input: distancePerStep must be an integer\n";
+                                }
+                            }
+                            if (tokens.size() >= 6 && volunteerType == "limited_driver") {
+                                try {
+                                    maxOrders = std::stoi(tokens[5]);
+                                } catch (std::invalid_argument& e) {
+                                    std::cout << "Invalid input: maxOrders must be an integer\n";
+                                }
+                            }
+                            BaseAction* action = new AddVolunteer(volunteerName, volunteerType, 0, maxOrders, maxDistance, distancePerStep);  // Set coolDown to 0 for drivers
+            // ...
+                        } else {
+                            std::cout << "Invalid volunteer type: " << volunteerType << "\n";
+                        }
+                    }
+                }
+
+                else if (tokens[0]=="orderStatus")  {
+                    int id= std::stoi(tokens[1]);
+                    BaseAction* action = new PrintOrderStatus(id);
+                    action ->act(*this);
+                    delete action;
+                }
+                else if (tokens[0]=="customerStatus"){
+                    int id =std::stoi(tokens[1]);
+                    BaseAction* action= new PrintCustomerStatus(id);
+                    action ->act(*this);
+                    delete action;
+                }
+                else if (tokens[0]=="volunteerStatus"){
+                    int id =std::stoi(tokens[1]);
+                    BaseAction* action= new PrintVolunteerStatus(id);
+                    action ->act(*this);
+                    delete action;
+                }
+                else if (tokens[0]=="log"){
+                    BaseAction* action = new PrintActionsLog();
+                    action ->act(*this);
+                    delete action;
+                }
+                else if (tokens[0]=="close"){
+                    BaseAction* action = new Close();
+                    action ->act(*this);
+                    delete action;
+                }
+                else if (tokens[0]=="backup"){
+                    BaseAction* action = new BackupWareHouse();
+                    action ->act(*this);
+                    delete action;
+                }
+                else if (tokens[0]=="restore"){
+                    BaseAction* action = new RestoreWareHouse();
+                    action ->act(*this);
+                    delete action;
+                }
+
 
                 else {
                     std::cout << "Invalid command: " << tokens[0] << "\n";
                 }
             }   
-                
 
         };
         const vector<BaseAction*> &getActionsLog() const{
