@@ -70,7 +70,7 @@ class SimulateStep : public BaseAction {
                     int activeO = vol->getActiveOrderId();
                     vol->step();
                     if (activeO==vol->getCompletedOrderId() ){
-                        wareHouse.moveorder(*wareHouse.getOrder(activeO), 0);
+                        wareHouse.moveOrder(*wareHouse.getOrder(activeO), 0);
                         // if (!vol->canTakeOrder())
                         //     wareHouse.deleteVol(vol);
                     }
