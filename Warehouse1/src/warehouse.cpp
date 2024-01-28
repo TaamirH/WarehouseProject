@@ -277,12 +277,18 @@ class WareHouse {
             customers.push_back(customer);
             customerCounter++;
         };
+        void addVolunteer(Volunteer* volunteer){
+            volunteers.push_back(volunteer);
+            volunteerCounter++;
+        };
+
+
         void printActionsLogs(){
             for (auto* action: actionsLog){
                 if ((*action).getStatus()==ActionStatus::COMPLETED){
-                    std::cout <<(*action).toString()<<"COMPLETED";}
+                    std::cout <<(*action).toString()<<" COMPLETED";}
                 else
-                    std::cout <<(*action).toString()<<"ERROR";
+                    std::cout <<(*action).toString()<<" ERROR";
             }
         };
         Customer &getCustomer(int customerId) const{

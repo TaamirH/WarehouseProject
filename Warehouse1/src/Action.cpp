@@ -10,7 +10,6 @@ class volunteer;
 class customer;
 using std::string;
 using std::vector;
-#define NULL ((void*)0)
 extern WareHouse* backup;
 //
 enum class ActionStatus{
@@ -65,13 +64,18 @@ class AddOrder : public BaseAction {
     public:
         AddOrder(int id): customerId{id}{};
         void act(WareHouse &wareHouse) override{
-            if (wareHouse.getCustomer(customerId).canMakeOrder()){
+            if (customerId>wareHouse.getCustomerCounter() || customerId<0)
+                error("Cannot place this order");
+            else if (wareHouse.getCustomer(customerId).canMakeOrder()){
 
             Order* newOrd = new Order (wareHouse.getOrderCounter(), customerId,
              wareHouse.getCustomer(customerId).getCustomerDistance());
             wareHouse.addOrder(newOrd);
+            complete();
             }else
             error("Cannot place this order");
+
+            wareHouse.addAction(this);
 
             }
         string toString() const override{return "order " + std::to_string(customerId);}
@@ -114,6 +118,8 @@ class AddCustomer : public BaseAction {
                 SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
                  customerName, distance, maxOrders);}
             wareHouse.addCustomer(cos);
+            complete();
+            wareHouse.addAction(this);
         }
         AddCustomer *clone() const override{return new AddCustomer(*this);}
         string toString() const override {return "customer "+ customerName + CTToString(customerType)
@@ -154,9 +160,12 @@ public:
             LimitedDriverVolunteer* vol = new LimitedDriverVolunteer(wareHouse.getVolunteerCounter(),
              name, maxDistance, distancePerStep, maxOrders);}
              
-            wareHouse.addVolunteer(vol);}
-            
+            wareHouse.addVolunteer(vol);
+            complete();
+            wareHouse.addAction(this);
 
+            
+        }
 
         AddVolunteer *clone() const override {return new AddVolunteer(*this);}
         string toString() const override {string s = "volunteer " +name + " "+ volunteerType + " ";
@@ -205,10 +214,12 @@ class PrintOrderStatus : public BaseAction {
         PrintOrderStatus(int id):orderId(id){};
 
         void act(WareHouse &wareHouse) override {
+
+        if (orderId>wareHouse.getOrderCounter() || orderId<0)
+            error("Order doesn't exist");
+        else{
         Order _order = wareHouse.getOrder(orderId); 
-        // if (_order==nullptr) 
-        //   add error ""Order doesn't exist";
-        // else{
+        
         std::cout<< "OrderId: " + std::to_string(orderId) +
         "\nOrderStatus: " + OSToString(_order.getStatus());
         if (_order.getCollectorId() == NO_VOLUNTEER)
@@ -219,6 +230,8 @@ class PrintOrderStatus : public BaseAction {
             std::cout<<"\nNone";
         else
         "\nDriverID: " +std::to_string (_order.getDriverId());
+        complete();}
+        wareHouse.addAction(this);
         }
         PrintOrderStatus *clone() const override{return new PrintOrderStatus(*this);}
         string toString() const override{return "orderStatus" + std::to_string(orderId);}
@@ -231,21 +244,23 @@ class PrintCustomerStatus: public BaseAction {
         PrintCustomerStatus(int _customerId):customerId{_customerId}{};
         void act(WareHouse &wareHouse) override{
 
-
+        if (customerId>wareHouse.getCustomerCounter() || customerId<0){
+            error("Customer doesn't exist");
+        }else{
         Customer &_customer = wareHouse.getCustomer(customerId); 
-        // if (_customer==nullptr) 
-        //   add error ""Order doesn't exist";
-        // else{
+        
         std::cout<< "CustomerID: " + std::to_string(customerId);
         vector<int> const orders = _customer.getOrdersIds();
 
-        PrintOrderStatus* pos = new PrintOrderStatus(97);
+        PrintOrderStatus* pos = new PrintOrderStatus(420);
         for (const int ord: orders){
             std::cout<< "\nOrderID: " + std::to_string(ord);
             std::cout<< "\nOrderStatus: " + pos->OSToString(wareHouse.getOrder(ord).getStatus());
         }
         int numLeft = _customer.getMaxOrders() - _customer.getNumOrders();
             std::cout<< "\nnumOrdersLeft: " + std::to_string(numLeft);
+        complete();}
+        wareHouse.addAction(this);
         }
 
         PrintCustomerStatus *clone() const override{return new PrintCustomerStatus(*this);}
@@ -259,11 +274,10 @@ class PrintVolunteerStatus : public BaseAction {
     public:
         PrintVolunteerStatus(int id):volunteerId{id}{};
         void act(WareHouse &_wareHouse) override{
+            if (volunteerId>_wareHouse.getVolunteerCounter() || volunteerId<0){
+                error("Volunteer doesn't exist");
+            }else{
             Volunteer &vol =_wareHouse.getVolunteer(volunteerId);
-
-             // if (vol==nullptr) 
-        //   add error ""Volunteer doesn't exist";
-        // else{
 
             std::cout<<"voluteerID: " + std::to_string(volunteerId);
             bool busy = vol.isBusy();
@@ -294,7 +308,9 @@ class PrintVolunteerStatus : public BaseAction {
                     std::cout<<"Ordersleft: " + std::to_string(ldv->getActiveOrderId());
                     delete ldv;
                 }  else std::cout<<"No Limit"; }
-
+                complete();
+            }
+                _wareHouse.addAction(this);
 }
 
         PrintVolunteerStatus *clone() const override{return new PrintVolunteerStatus(*this);}
@@ -307,7 +323,10 @@ class PrintVolunteerStatus : public BaseAction {
 class PrintActionsLog : public BaseAction {
     public:
         PrintActionsLog();
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &wareHouse) override{wareHouse.printActionsLogs();
+        complete();
+        wareHouse.addAction(this);
+        }
         PrintActionsLog *clone() const override{return new PrintActionsLog(*this);}
         string toString() const override{return "log";}
     private:
