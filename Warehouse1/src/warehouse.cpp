@@ -8,6 +8,8 @@
 #include "../include/Customer.h"
 #include "../include/Volunteer.h"
 #include "../include/Action.h"
+#include "../include/WareHouse.h"
+
 
 
 
@@ -21,11 +23,9 @@ class Order;
 // Warehouse responsible for Volunteers, Customers and Actions.
 //finish
 
-class WareHouse {
 
-    public:
         
-        std::string trimLeadingWhitespace(const std::string &str)
+        std::string WareHouse:: trimLeadingWhitespace(const std::string &str)
 {
         size_t firstNonSpace = str.find_first_not_of(" \t");
             if (firstNonSpace == std::string::npos)
@@ -35,7 +35,7 @@ class WareHouse {
     }
     return str.substr(firstNonSpace);
 }
-        void parseFile(const string &filePath)
+        void WareHouse::parseFile(const string &filePath)
     {
         std::fstream inputFile(filePath);
 
@@ -150,12 +150,12 @@ class WareHouse {
     // Close the file
     inputFile.close();
 }
-        WareHouse(const string &configFilePath){
+        WareHouse::WareHouse(const string &configFilePath){
             customerCounter,volunteerCounter,orderCounter=0;
             open();
             parseFile(configFilePath);
         };
-        WareHouse(WareHouse &other):
+        WareHouse::WareHouse(WareHouse &other):
             isOpen(other.isOpen),customerCounter(other.customerCounter),
             volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
             for (auto* action:other.actionsLog){
@@ -177,7 +177,7 @@ class WareHouse {
                 customers.push_back(customer->clone());
             }
         }
-        WareHouse &operator=(const WareHouse &other){
+        WareHouse& WareHouse:: operator=(const WareHouse &other){
             if (this!= &other){
                 isOpen=other.isOpen;
                 customerCounter=other.customerCounter;
@@ -209,7 +209,7 @@ class WareHouse {
             }
             }
         }
-        ~WareHouse(){
+        WareHouse:: ~WareHouse (){
             for (auto* actionlog:actionsLog){
                 delete actionlog;
             }
@@ -229,7 +229,7 @@ class WareHouse {
                 delete customer;
             }        
             }
-        WareHouse(WareHouse &&other) noexcept :
+         WareHouse::WareHouse(WareHouse &&other) :
             isOpen(other.isOpen),
             customerCounter(other.customerCounter),
             volunteerCounter(other.volunteerCounter),
@@ -241,7 +241,7 @@ class WareHouse {
             completedOrders(std::move(other.completedOrders)),
             customers(std::move(other.customers)) {}
 
-    WareHouse& operator=(WareHouse &&other) noexcept {  // Correct declaration
+    WareHouse& WareHouse:: operator=(WareHouse &&other) {  // Correct declaration
         if (this != &other) {
         //// Move basic members
             isOpen = other.isOpen;
@@ -258,7 +258,7 @@ class WareHouse {
         }
         return *this;
         }
-        void start(){
+        void WareHouse::start(){
             open();
             while (isOpen){
                 std::cout << "What do you want to do? ";
@@ -410,28 +410,29 @@ class WareHouse {
             }   
 
         };
-        const vector<BaseAction*> &getActionsLog() const{
+
+        const vector<BaseAction*> &WareHouse::getActionsLog() const{
             return actionsLog;
         };
-        void addOrder(Order* order){
+        void WareHouse::addOrder(Order* order){
             pendingOrders.push_back(order);
             orderCounter++;
         };
          
-        void addAction(BaseAction* action){
+        void WareHouse::addAction(BaseAction* action){
             actionsLog.push_back(action);
         };
-        void addCustomer(Customer* customer){
+        void WareHouse::addCustomer(Customer* customer){
             customers.push_back(customer);
             customerCounter++;
         };
-        void addVolunteer(Volunteer* volunteer){
+        void WareHouse::addVolunteer(Volunteer* volunteer){
             volunteers.push_back(volunteer);
             volunteerCounter++;
         };
 
 
-        void printActionsLogs(){
+        void WareHouse::printActionsLogs(){
             for (auto* action: actionsLog){
                 if ((*action).getStatus()==ActionStatus::COMPLETED){
                     std::cout <<(*action).toString()<<" COMPLETED";}
@@ -439,7 +440,7 @@ class WareHouse {
                     std::cout <<(*action).toString()<<" ERROR";
             }
         };
-        Customer &getCustomer(int customerId) const{
+        Customer& WareHouse::getCustomer(int customerId) const{
             for (const auto& customer : customers) {
                 if ((*customer).getId() == customerId) {
                     return *customer;
@@ -448,7 +449,7 @@ class WareHouse {
         // If no matching customer is found, throw an exception or handle it accordingly
         throw std::out_of_range("Customer with the specified ID not found");
         };
-        Volunteer &getVolunteer(int volunteerId) const{
+        Volunteer& WareHouse::getVolunteer(int volunteerId) const{
             for (const auto& volunteer : volunteers){
                 if ((*volunteer).getId()==volunteerId){
                     return *volunteer;
@@ -457,7 +458,7 @@ class WareHouse {
         throw std::out_of_range("Volunteer with the specified ID not found");
 
         };
-        Order &getOrder(int orderId) const{
+        Order& WareHouse::getOrder(int orderId) const{
             for (const auto& orders : {&pendingOrders, &inProcessOrders, &completedOrders}) {
                 for (const auto& orderPtr : *orders) {
                     if (orderPtr->getId() == orderId) {
@@ -469,27 +470,27 @@ class WareHouse {
     throw std::runtime_error("Order not found"); // Or return a nullptr if preferred
 
         };
-        int getCustomerCounter() const{
+        int WareHouse::getCustomerCounter() const{
             return customerCounter;}
-        int getVolunteerCounter() const{
+        int WareHouse::getVolunteerCounter() const{
             return volunteerCounter;}
-        int getOrderCounter() const{
+        int WareHouse::getOrderCounter() const{
             return orderCounter;}
 
-        vector <Order*> getPendingOrders () const{return pendingOrders;}
-        vector <Order*> getProcessingOrders () const {return inProcessOrders;}
-        vector <Order*> getCompletedOrders () const{return completedOrders;}
-        vector <Volunteer*> getVolunteers () const{return volunteers;}
+        const vector <Order*>& WareHouse::getPendingOrders () const{return pendingOrders;}
+        const vector <Order*>& WareHouse:: getProcessingOrders () const {return inProcessOrders;}
+        const vector <Order*>& WareHouse::getCompletedOrders () const{return completedOrders;}
+        const vector <Volunteer*>& WareHouse::getVolunteers () const{return volunteers;}
         
-        void close(){
+        void WareHouse::close(){
             isOpen=false;
             cout <<"Warehouse is Closed!";
         };
-        void open(){
+        void WareHouse::open(){
             isOpen=true;
             cout <<"Warehouse is Open!";
         };
-        void moveOrder(Order *order,int id){
+        void WareHouse::moveOrder(Order *order,int id){
             OrderStatus status=order->getStatus();
             if (status==OrderStatus::PENDING){
                 order->setStatus(OrderStatus::COLLECTING);
@@ -519,22 +520,21 @@ class WareHouse {
 
 
         }
-        void deleteVol(Volunteer* vol){
+        void WareHouse::deleteVol(Volunteer* vol){
             auto it = std::find(volunteers.begin(), volunteers.end(),vol);
             volunteers.erase(it);
         }
         
-    private:
-        bool isOpen;
-        vector<BaseAction*> actionsLog;
-        vector<Volunteer*> volunteers;
-        vector<Order*> pendingOrders;
-        vector<Order*> inProcessOrders;
-        vector<Order*> completedOrders;
-        vector<Customer*> customers;
-        int customerCounter; //For assigning unique customer IDs
-        int volunteerCounter; //For assigning unique volunteer IDs
-        int orderCounter;
+    // private:
+    //     bool isOpen;
+    //     vector<BaseAction*> actionsLog;
+    //     vector<Volunteer*> volunteers;
+    //     vector<Order*> pendingOrders;
+    //     vector<Order*> inProcessOrders;
+    //     vector<Order*> completedOrders;
+    //     vector<Customer*> customers;
+    //     int customerCounter; //For assigning unique customer IDs
+    //     int volunteerCounter; //For assigning unique volunteer IDs
+    //     int orderCounter;
 
     
-};

@@ -33,17 +33,18 @@ class WareHouse {
         Customer &getCustomer(int customerId) const;
         Volunteer &getVolunteer(int volunteerId) const;
         Order &getOrder(int orderId) const;
-        const vector<BaseAction*> &getActions() const;
+        const vector<BaseAction*> &getActionsLog() const;
         int getCustomerCounter() const;
         int getVolunteerCounter() const;
         int getOrderCounter() const;
-        vector <Order*> &getPendingOrders () const;
-        vector <Order*> &getProcessingOrders () const;
-        vector <Order*> &getCompletedOrders () const;
-        vector <Volunteer*> &getVolunteers () const;
+        const vector <Order*> &getPendingOrders () const;
+        const vector <Order*> &getProcessingOrders () const;
+        const vector <Order*> &getCompletedOrders () const;
+        const vector <Volunteer*> &getVolunteers () const;
         void close();
         void open();
         void moveOrder(Order *order,int id);
+        void deleteVol(Volunteer* vol);
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;
