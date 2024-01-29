@@ -25,7 +25,7 @@ enum class CustomerType{
 class BaseAction{
     public:
         BaseAction();
-        ActionStatus getStatus() const;
+        ActionStatus getStatus() const{return status;}
         virtual void act(WareHouse& wareHouse)=0;
         virtual string toString() const=0;
         virtual BaseAction* clone() const=0;
@@ -62,18 +62,20 @@ class SimulateStep : public BaseAction {
                         vol->acceptOrder( *ord);
                         ord->setCollectorId(vol->getId());
                         ord->setStatus(OrderStatus::COLLECTING);
-                        wareHouse.moveOrder(*ord, vol->getId());
+                        wareHouse.moveOrder(ord, vol->getId());
                     }
                 }}  
                 for (auto* vol : wareHouse.getVolunteers()){
                     int activeO = vol->getActiveOrderId();
                     vol->step();
                     if (activeO==vol->getCompletedOrderId() ){
-                        wareHouse.moveOrder(*wareHouse.getOrder(activeO), 0);
-                        // if (!vol->canTakeOrder())
-                        //     wareHouse.deleteVol(vol);
+                        wareHouse.moveOrder(&wareHouse.getOrder(activeO), -1);
+                        if (!vol->hasOrdersLeft())
+                            wareHouse.deleteVol(vol);
                     }
                 }
+                complete();
+                wareHouse.addAction(this);
         }
         
     
@@ -313,21 +315,21 @@ class PrintVolunteerStatus : public BaseAction {
                  CollectorVolunteer* cv = dynamic_cast <CollectorVolunteer*>(&vol);
                  if (busy)
                    std::cout<<"\nTimeLeft: "+  std::to_string(cv->getTimeLeft()) + "OrdersLeft: No Limit";
-                delete cv;
+                
              }
             else if (vol.whoAmI()==1){         //is a limited collector volunteer
                     LimitedCollectorVolunteer* lcv = dynamic_cast <LimitedCollectorVolunteer*>(&vol);
                         if(busy)
                     std::cout<<"\nTimeLeft: "+  std::to_string(lcv->getTimeLeft());
                     std::cout<<"\nOrdersleft: " + std::to_string(lcv->getActiveOrderId());
-                    delete lcv;
+                    
              }
                 
              else if (vol.whoAmI()==2){//is a driver volunteer
                 DriverVolunteer* dv = dynamic_cast <DriverVolunteer*>(&vol);
                 if(busy)
                     std::cout<<"\nDistanceLeft: "+  std::to_string(dv->getDistanceLeft());
-                delete dv;
+                
                 std::cout<<"\nOrders Left: No Limit";
              }
             else {         //is a limited Driver volunteer
@@ -335,7 +337,7 @@ class PrintVolunteerStatus : public BaseAction {
                         if(busy)
                     std::cout<<"\nDistanceLeft: "+  std::to_string(ldv->getDistanceLeft());
                     std::cout<<"\nOrdersleft: " + std::to_string(ldv->getActiveOrderId());
-                    delete ldv;
+                    
                 } 
             
                 complete();
@@ -390,9 +392,9 @@ class RestoreWareHouse : public BaseAction {
             if (backup== nullptr){
                 error("No backup available");
             }
-            else{
+            else
                 wareHouse=*backup;
-                        }
+                        
         };
         RestoreWareHouse *clone() const override{return new RestoreWareHouse(*this);};
         string toString() const override{return "restore";};
