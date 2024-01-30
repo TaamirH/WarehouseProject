@@ -61,7 +61,7 @@ class order;
 
 
         LimitedCollectorVolunteer::LimitedCollectorVolunteer(int _id, const string &_name, int _coolDown ,int _maxOrders):
-        CollectorVolunteer(_id, _name, _coolDown), maxOrders{_maxOrders}{};
+        CollectorVolunteer(_id, _name, _coolDown), maxOrders{_maxOrders},ordersLeft(0){};
         LimitedCollectorVolunteer* LimitedCollectorVolunteer:: clone() const {return new LimitedCollectorVolunteer(*this);}
         bool LimitedCollectorVolunteer::hasOrdersLeft() const {return ordersLeft!=0;}
         bool LimitedCollectorVolunteer::canTakeOrder(const Order &order) const {return !this->isBusy() && hasOrdersLeft() 
@@ -115,7 +115,7 @@ class order;
         // int distanceLeft; // Distance left until the volunteer finishes his current order
 
         LimitedDriverVolunteer::LimitedDriverVolunteer(int _id, const string &_name, int _maxDistance, int _distancePerStep,int _maxOrders)
-        :DriverVolunteer(_id, _name, _maxDistance, _distancePerStep), maxOrders{_maxOrders}{};
+        :DriverVolunteer(_id, _name, _maxDistance, _distancePerStep), maxOrders{_maxOrders},ordersLeft(0){};
         LimitedDriverVolunteer* LimitedDriverVolunteer:: clone() const {return new LimitedDriverVolunteer(*this);}
         int LimitedDriverVolunteer::getMaxOrders() const {return maxOrders;}
         int LimitedDriverVolunteer::getNumOrdersLeft() const {return ordersLeft;}

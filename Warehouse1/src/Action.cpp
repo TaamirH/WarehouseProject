@@ -84,9 +84,8 @@ extern WareHouse* backup;
                 error("Cannot place this order");
             else if (wareHouse.getCustomer(customerId).canMakeOrder()){
 
-            auto theCos = wareHouse.getCustomer(customerId);
-            Order* newOrd = new Order (theCos.addOrder(wareHouse.getOrderCounter())
-            , customerId, theCos.getCustomerDistance());
+            Order* newOrd = new Order (wareHouse.getCustomer(customerId).addOrder(wareHouse.getOrderCounter())
+            , customerId, wareHouse.getCustomer(customerId).getCustomerDistance());
             wareHouse.addOrder(newOrd);
             complete();
             }else
@@ -299,13 +298,18 @@ extern WareHouse* backup;
              if (vol.whoAmI()==0){         //is a collector volunteer
                  CollectorVolunteer* cv = dynamic_cast <CollectorVolunteer*>(&vol);
                  if (busy)
-                   std::cout<<"\nTimeLeft: "+  std::to_string(cv->getTimeLeft()) + "OrdersLeft: No Limit";
+                   std::cout<<"\nTimeLeft: "+  std::to_string(cv->getTimeLeft()) ;
+                else
+                    std::cout<<"\nNone";
+                    std::cout<< "\nOrdersLeft: No Limit";
                 
              }
             else if (vol.whoAmI()==1){         //is a limited collector volunteer
                     LimitedCollectorVolunteer* lcv = dynamic_cast <LimitedCollectorVolunteer*>(&vol);
                         if(busy)
                     std::cout<<"\nTimeLeft: "+  std::to_string(lcv->getTimeLeft());
+                    else
+                    std::cout<<"\nNone";
                     std::cout<<"\nOrdersleft: " + std::to_string(lcv->getActiveOrderId());
                     
              }
@@ -314,6 +318,8 @@ extern WareHouse* backup;
                 DriverVolunteer* dv = dynamic_cast <DriverVolunteer*>(&vol);
                 if(busy)
                     std::cout<<"\nDistanceLeft: "+  std::to_string(dv->getDistanceLeft());
+                    else
+                    std::cout<<"\nNone";
                 
                 std::cout<<"\nOrders Left: No Limit";
              }
@@ -321,6 +327,8 @@ extern WareHouse* backup;
                     LimitedDriverVolunteer* ldv = dynamic_cast <LimitedDriverVolunteer*>(&vol);
                         if(busy)
                     std::cout<<"\nDistanceLeft: "+  std::to_string(ldv->getDistanceLeft());
+                    else
+                    std::cout<<"\nNone";
                     std::cout<<"\nOrdersleft: " + std::to_string(ldv->getActiveOrderId());
                     
                 } 
