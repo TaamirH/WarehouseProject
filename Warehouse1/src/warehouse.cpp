@@ -151,7 +151,9 @@ class Order;
     inputFile.close();
 }
         WareHouse::WareHouse(const string &configFilePath){
-            customerCounter,volunteerCounter,orderCounter=0;
+            customerCounter=0;
+            volunteerCounter=0;
+            orderCounter=0;
             open();
             parseFile(configFilePath);
         };
@@ -442,7 +444,6 @@ class Order;
         };
         Customer& WareHouse::getCustomer(int customerId) const{
             for (const auto& customer : customers) {
-                cout<< customer->getId();
                 if ((*customer).getId() == customerId) {
                     return *customer;
             }

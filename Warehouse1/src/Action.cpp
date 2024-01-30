@@ -102,9 +102,9 @@ extern WareHouse* backup;
 
 
     CustomerType AddCustomer ::toCustomerType(const std::string& str) {
-        if (str == "Soldier") {
+        if (str == "Soldier" || str == "soldier") {
             return CustomerType::Soldier;
-    }   else if (str == "Civilian") {
+    }   else if (str == "Civilian"|| str == "civilian") {
             return CustomerType::Civilian;
     }   else {
         // Handle invalid input
