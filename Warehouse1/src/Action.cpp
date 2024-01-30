@@ -310,7 +310,7 @@ extern WareHouse* backup;
                     std::cout<<"\nTimeLeft: "+  std::to_string(lcv->getTimeLeft());
                     else
                     std::cout<<"\nNone";
-                    std::cout<<"\nOrdersleft: " + std::to_string(lcv->getActiveOrderId());
+                    std::cout<<"\nOrdersleft: " + std::to_string(lcv->getNumOrdersLeft());
                     
              }
                 
@@ -329,7 +329,7 @@ extern WareHouse* backup;
                     std::cout<<"\nDistanceLeft: "+  std::to_string(ldv->getDistanceLeft());
                     else
                     std::cout<<"\nNone";
-                    std::cout<<"\nOrdersleft: " + std::to_string(ldv->getActiveOrderId());
+                    std::cout<<"\nOrdersleft: " + std::to_string(ldv->getNumOrdersLeft());
                     
                 } 
             
