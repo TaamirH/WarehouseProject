@@ -36,7 +36,7 @@ class order;
         CollectorVolunteer::CollectorVolunteer(int _id, const string &_name, int _coolDown):
         Volunteer(_id, _name),coolDown{_coolDown}{};
         CollectorVolunteer* CollectorVolunteer:: clone() const {return new CollectorVolunteer(*this);}
-        void CollectorVolunteer:: step() {if(decreaseCoolDown){
+        void CollectorVolunteer:: step() {if(decreaseCoolDown()){
             completedOrderId = activeOrderId;
             activeOrderId = NO_ORDER;
         }}
@@ -44,7 +44,7 @@ class order;
         int CollectorVolunteer:: getCoolDown() const{return coolDown;}
         int CollectorVolunteer:: getTimeLeft() const{return timeLeft;}
         bool CollectorVolunteer:: decreaseCoolDown(){if (isBusy())timeLeft--;
-        return getTimeLeft==0;}        //Decrease timeLeft by 1,return true if timeLeft=0,false otherwise
+        return getTimeLeft()==0;}        //Decrease timeLeft by 1,return true if timeLeft=0,false otherwise
         bool CollectorVolunteer:: hasOrdersLeft() const {return true;}
         bool CollectorVolunteer:: canTakeOrder(const Order &order) const {return !this->isBusy()
          && order.getStatus()==OrderStatus::PENDING;}
@@ -64,7 +64,7 @@ class order;
         CollectorVolunteer(_id, _name, _coolDown), maxOrders{_maxOrders}{};
         LimitedCollectorVolunteer* LimitedCollectorVolunteer:: clone() const {return new LimitedCollectorVolunteer(*this);}
         bool LimitedCollectorVolunteer::hasOrdersLeft() const {return ordersLeft!=0;}
-        bool LimitedCollectorVolunteer::canTakeOrder(const Order &order) const {return !this->isBusy() && hasOrdersLeft 
+        bool LimitedCollectorVolunteer::canTakeOrder(const Order &order) const {return !this->isBusy() && hasOrdersLeft() 
         && order.getStatus()==OrderStatus::PENDING;};
         void LimitedCollectorVolunteer::acceptOrder(const Order &order) {ordersLeft--;
         activeOrderId = order.getId();
@@ -100,7 +100,7 @@ class order;
         void DriverVolunteer::acceptOrder(const Order &order) {setDistanceLeft (order.getDistance());
         activeOrderId = order.getId();
         } // Assign distanceLeft to order's distance
-        void DriverVolunteer::step() {if(decreaseDistanceLeft){
+        void DriverVolunteer::step() {if(decreaseDistanceLeft()){
             completedOrderId = activeOrderId;
             activeOrderId = NO_ORDER;
         }

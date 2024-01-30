@@ -442,6 +442,7 @@ class Order;
         };
         Customer& WareHouse::getCustomer(int customerId) const{
             for (const auto& customer : customers) {
+                cout<< customer->getId();
                 if ((*customer).getId() == customerId) {
                     return *customer;
             }
@@ -526,6 +527,10 @@ class Order;
             deletedVolunteers.push_back(vol->getId());
 
         }
+        const vector <int>& WareHouse::getDeletedVolunteers() const{ return deletedVolunteers;}
+
+        
+
         
     // private:
     //     bool isOpen;

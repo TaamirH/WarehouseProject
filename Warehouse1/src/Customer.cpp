@@ -29,7 +29,7 @@ using std::vector;
             return ordersId;}
 
         int Customer::addOrder(int orderId){
-            if (canMakeOrder){
+            if (canMakeOrder()){
                 ordersId.push_back(orderId);
                 return orderId;}
             else

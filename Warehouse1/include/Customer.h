@@ -34,7 +34,7 @@ class Customer {
 class SoldierCustomer: public Customer {
     public:
         SoldierCustomer(int id, const std::string &name, int locationDistance, int maxOrders);
-        SoldierCustomer *clone() const override{return new SoldierCustomer(*this);}
+        SoldierCustomer *clone() const override;
     
     private:
         
@@ -43,7 +43,7 @@ class SoldierCustomer: public Customer {
 class CivilianCustomer: public Customer {
     public:
         CivilianCustomer(int id, const std::string &name, int locationDistance, int maxOrders);
-        CivilianCustomer *clone() const override{return new CivilianCustomer(*this);}
+        CivilianCustomer *clone() const override;
     
     private:
         
