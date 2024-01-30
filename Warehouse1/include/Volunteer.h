@@ -9,9 +9,9 @@ using std::vector;
 
 class Volunteer {
     public:
-        Volunteer(int id, const string &name);
+        Volunteer(int id, const std::string &name);
         int getId() const;
-        const string &getName() const;
+        const std::string &getName() const;
         int getActiveOrderId() const;
         int getCompletedOrderId() const;
         bool isBusy() const; // Signal whether the volunteer is currently processing an order    
@@ -21,7 +21,7 @@ class Volunteer {
                 
         virtual void step() = 0; //Simulate volunteer step,if the volunteer finished the order, transfer activeOrderId to completedOrderId
 
-        virtual string toString() const = 0;
+        virtual std::string toString() const = 0;
         virtual Volunteer* clone() const = 0; //Return a copy of the volunteer
         virtual int whoAmI () const = 0;
 
@@ -31,7 +31,7 @@ class Volunteer {
     
     private:
         const int id;
-        const string name;
+        const std::string name;
 
 };
 
@@ -39,7 +39,7 @@ class Volunteer {
 class CollectorVolunteer: public Volunteer {
 
     public:
-        CollectorVolunteer(int id, const string &name, int coolDown);
+        CollectorVolunteer(int id, const std::string &name, int coolDown);
         CollectorVolunteer *clone() const override;
         void step() override;
         int getCoolDown() const;
@@ -48,7 +48,7 @@ class CollectorVolunteer: public Volunteer {
         bool hasOrdersLeft() const override;
         bool canTakeOrder(const Order &order) const override;
         void acceptOrder(const Order &order) override;
-        string toString() const override;
+        std::string toString() const override;
         int whoAmI () const override;
     
     private:
@@ -59,7 +59,7 @@ class CollectorVolunteer: public Volunteer {
 class LimitedCollectorVolunteer: public CollectorVolunteer {
 
     public:
-        LimitedCollectorVolunteer(int id, const string &name, int coolDown ,int maxOrders);
+        LimitedCollectorVolunteer(int id, const std::string &name, int coolDown ,int maxOrders);
         LimitedCollectorVolunteer *clone() const override;
         bool hasOrdersLeft() const override;
         bool canTakeOrder(const Order &order) const override;
@@ -67,7 +67,7 @@ class LimitedCollectorVolunteer: public CollectorVolunteer {
 
         int getMaxOrders() const;
         int getNumOrdersLeft() const;
-        string toString() const override;
+        std::string toString() const override;
         int whoAmI () const override;
     
     private:
@@ -78,7 +78,7 @@ class LimitedCollectorVolunteer: public CollectorVolunteer {
 class DriverVolunteer: public Volunteer {
 
     public:
-        DriverVolunteer(int id, const string &name, int maxDistance, int distancePerStep);
+        DriverVolunteer(int id, const std::string &name, int maxDistance, int distancePerStep);
         DriverVolunteer *clone() const override;
 
         int getDistanceLeft() const;
@@ -89,7 +89,7 @@ class DriverVolunteer: public Volunteer {
         bool canTakeOrder(const Order &order) const override; // Signal if the volunteer is not busy and the order is within the maxDistance
         void acceptOrder(const Order &order) override; // Assign distanceLeft to order's distance
         void step() override; // Decrease distanceLeft by distancePerStep
-        string toString() const override;
+        std::string toString() const override;
         void setDistanceLeft(int i);
         int whoAmI () const override;
 
@@ -102,14 +102,14 @@ class DriverVolunteer: public Volunteer {
 class LimitedDriverVolunteer: public DriverVolunteer {
 
     public:
-        LimitedDriverVolunteer(int id, const string &name, int maxDistance, int distancePerStep,int maxOrders);
+        LimitedDriverVolunteer(int id, const std::string &name, int maxDistance, int distancePerStep,int maxOrders);
         LimitedDriverVolunteer *clone() const override;
         int getMaxOrders() const;
         int getNumOrdersLeft() const;
         bool hasOrdersLeft() const override;
         bool canTakeOrder(const Order &order) const override; // Signal if the volunteer is not busy, the order is within the maxDistance.
         void acceptOrder(const Order &order) override; // Assign distanceLeft to order's distance and decrease ordersLeft
-        string toString() const override;
+        std::string toString() const override;
         int whoAmI () const override;
         
 

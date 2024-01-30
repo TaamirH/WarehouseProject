@@ -9,7 +9,7 @@ using std::vector;
 class Customer {
     public:
         Customer(int _id, const string &_name, int _locationDistance, int _maxOrders);
-        const string &getName() const;
+        const std::string &getName() const;
         int getId() const;
         int getCustomerDistance() const;
         int getMaxOrders() const; //Returns maxOrders
@@ -23,7 +23,7 @@ class Customer {
         
     private:
         const int id;
-        const string name;
+        const std::string name;
         const int locationDistance;
         const int maxOrders;
         vector<int> ordersId;
@@ -33,7 +33,7 @@ class Customer {
 
 class SoldierCustomer: public Customer {
     public:
-        SoldierCustomer(int id, const string &name, int locationDistance, int maxOrders);
+        SoldierCustomer(int id, const std::string &name, int locationDistance, int maxOrders);
         SoldierCustomer *clone() const override{return new SoldierCustomer(*this);}
     
     private:
@@ -42,7 +42,7 @@ class SoldierCustomer: public Customer {
 
 class CivilianCustomer: public Customer {
     public:
-        CivilianCustomer(int id, const string &name, int locationDistance, int maxOrders);
+        CivilianCustomer(int id, const std::string &name, int locationDistance, int maxOrders);
         CivilianCustomer *clone() const override{return new CivilianCustomer(*this);}
     
     private:
