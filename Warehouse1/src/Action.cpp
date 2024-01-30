@@ -10,8 +10,8 @@ class customer;
 using std::string;
 using std::vector;
 extern WareHouse* backup;
-#include <stack>;
-using namespace std;
+
+
 //
 enum class ActionStatus{
     COMPLETED, ERROR
@@ -22,38 +22,35 @@ enum class CustomerType{
 };
 
 
-class BaseAction{
-    public:
-        BaseAction();
-        ActionStatus getStatus() const{return status;}
-        virtual void act(WareHouse& wareHouse)=0;
-        virtual string toString() const=0;
-        virtual BaseAction* clone() const=0;
 
-    protected:
-        void complete(){
+        BaseAction:: BaseAction(){};
+        ActionStatus BaseAction::getStatus() const{return status;}
+        // virtual void act(WareHouse& wareHouse)=0;
+        // virtual string toString() const=0;
+        // virtual BaseAction* clone() const=0;
+
+    
+        void BaseAction::complete(){
             status = ActionStatus::COMPLETED;
         };
-        void error(string _errorMsg){
+        void BaseAction::error(std::string _errorMsg){
             status = ActionStatus::ERROR;
             errorMsg=_errorMsg;
             std::cout <<"Error:"<<errorMsg;
         };
-        string getErrorMsg() const{
+        std::string BaseAction::getErrorMsg() const{
             return errorMsg;}
 
-    private:
-        string errorMsg;
-        ActionStatus status;
-};
+    // private:
+    //     string errorMsg;
+    //     ActionStatus status;
 
-class SimulateStep : public BaseAction {
 
-    public:
-        SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}
 
-        void act(WareHouse &wareHouse) override{
-            stack<Order> orders;
+        SimulateStep ::SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}
+
+        void SimulateStep ::act(WareHouse &wareHouse) {
+            
             
             for (auto* vol : wareHouse.getVolunteers()){
                 for (Order* ord : wareHouse.getPendingOrders()){
@@ -79,17 +76,16 @@ class SimulateStep : public BaseAction {
         }
         
     
-        std::string toString() const override{return "step " + std::to_string(numOfSteps);}
-        SimulateStep *clone() const override{return new SimulateStep(*this);}
+        std::string SimulateStep ::toString() const {return "step " + std::to_string(numOfSteps);}
+        SimulateStep * SimulateStep ::clone() const {return new SimulateStep(*this);}
 
-    private:
-        const int numOfSteps;
-};
+    // private:
+        // const int numOfSteps;
 
-class AddOrder : public BaseAction {
-    public:
-        AddOrder(int id): customerId{id}{};
-        void act(WareHouse &wareHouse) override{
+
+
+        AddOrder ::AddOrder(int id): customerId{id}{};
+        void AddOrder ::act(WareHouse &wareHouse) {
             if (customerId>wareHouse.getCustomerCounter() || customerId<0)
                 error("Cannot place this order");
             else if (wareHouse.getCustomer(customerId).canMakeOrder()){
@@ -104,15 +100,14 @@ class AddOrder : public BaseAction {
             wareHouse.addAction(this);
 
             }
-        string toString() const override{return "order " + std::to_string(customerId);}
-        AddOrder *clone() const override{return new AddOrder(*this);}
-    private:
-        const int customerId;
-};
+        std::string AddOrder ::toString() const {return "order " + std::to_string(customerId);}
+        AddOrder * AddOrder ::clone() const {return new AddOrder(*this);}
+    // private:
+        // const int customerId;
 
-class AddCustomer : public BaseAction {
-    public:
-    CustomerType toCustomerType(const std::string& str) {
+
+
+    CustomerType AddCustomer ::toCustomerType(const std::string& str) {
         if (str == "Soldier") {
             return CustomerType::Soldier;
     }   else if (str == "Civilian") {

@@ -26,7 +26,7 @@ class Order {
         int getCollectorId() const;
         int getDriverId() const;
         OrderStatus getStatus() const;
-        const string toString() const;
+        const std::string toString() const;
         int getDistance() const;
         Order *clone() const;
 
