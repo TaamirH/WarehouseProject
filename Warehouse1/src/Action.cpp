@@ -10,7 +10,7 @@ class volunteer;
 class customer;
 using std::string;
 using std::vector;
-extern WareHouse* backup;
+
 
 
 //
@@ -268,7 +268,7 @@ extern WareHouse* backup;
             std::cout<< "\nOrderID: " + std::to_string(ord);
             std::cout<< "\nOrderStatus: " + pos->OSToString(wareHouse.getOrder(ord).getStatus());
         }
-        int numLeft = _customer.getMaxOrders() - _customer.getNumOrders();
+        int numLeft = (_customer.getMaxOrders() - _customer.getNumOrders());
             std::cout<< "\nnumOrdersLeft: " + std::to_string(numLeft);
         complete();}
         wareHouse.addAction(this);
@@ -292,7 +292,7 @@ extern WareHouse* backup;
             std::cout<<"voluteerID: " + std::to_string(volunteerId);
             bool busy = vol.isBusy();
             if (!busy)
-                std::cout<< "\n isBusy: False \n None \n None";
+                std::cout<< "\nisBusy: False\n None \nNone";
             else std::cout<<"\n isBusy: True \nOrderId: " + std::to_string(vol.getActiveOrderId());
             
              if (vol.whoAmI()==0){         //is a collector volunteer
@@ -362,8 +362,8 @@ extern WareHouse* backup;
                 print.act(wareHouse);
             }
             wareHouse.close();
-                
-             
+            complete();
+            wareHouse.addAction(this);
         };
         Close * Close::clone() const {return new Close(*this);};
         std::string Close::toString() const {return "close";};
@@ -373,6 +373,8 @@ extern WareHouse* backup;
         BackupWareHouse ::BackupWareHouse(){}
         void BackupWareHouse ::act(WareHouse &wareHouse) {
             backup = &wareHouse;
+            complete();
+            wareHouse.addAction(this);
         };
         BackupWareHouse* BackupWareHouse :: clone() const {return new BackupWareHouse(*this);};
         std::string BackupWareHouse ::toString() const {return "backup";};
@@ -387,6 +389,8 @@ extern WareHouse* backup;
             }
             else
                 wareHouse=*backup;
+            complete();
+            wareHouse.addAction(this);
                         
         };
         RestoreWareHouse * RestoreWareHouse ::clone() const {return new RestoreWareHouse(*this);};

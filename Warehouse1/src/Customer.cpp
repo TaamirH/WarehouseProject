@@ -31,7 +31,9 @@ using std::vector;
         int Customer::addOrder(int orderId){
             if (canMakeOrder()){
                 ordersId.push_back(orderId);
-                return orderId;}
+                madeOrders++;
+                return orderId;
+                }
             else
                 return -1;
         }; //return OrderId if order was added successfully, -1 otherwise

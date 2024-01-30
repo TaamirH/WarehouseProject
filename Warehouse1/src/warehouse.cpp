@@ -282,12 +282,12 @@ class Order;
                     int numberOfSteps = std::stoi(tokens[1]);
                     BaseAction* action = new SimulateStep(numberOfSteps);  // Create using new
                     action->act(*this);
-                    delete action;  // Manually delete after use
+                    
                 } else if (tokens[0] == "order") {
                     int customerId = std::stoi(tokens[1]);
                     BaseAction* action = new AddOrder(customerId);  // Create using new
                     action->act(*this);
-                    delete action;  // Manually delete after use
+                    
                 }
                 else if (tokens[0] == "customer") {
                     if (tokens.size() < 5) {
@@ -387,7 +387,7 @@ class Order;
                 else if (tokens[0]=="log"){
                     BaseAction* action = new PrintActionsLog();
                     action ->act(*this);
-                    delete action;
+                    
                 }
                 else if (tokens[0]=="close"){
                     BaseAction* action = new Close();
@@ -437,9 +437,9 @@ class Order;
         void WareHouse::printActionsLogs(){
             for (auto* action: actionsLog){
                 if ((*action).getStatus()==ActionStatus::COMPLETED){
-                    std::cout <<(*action).toString()<<" COMPLETED";}
+                    std::cout <<(*action).toString() +" COMPLETED\n";}
                 else
-                    std::cout <<(*action).toString()<<" ERROR";
+                    std::cout <<(*action).toString() +" ERROR\n";
             }
         };
         Customer& WareHouse::getCustomer(int customerId) const{
