@@ -368,7 +368,13 @@ class Close : public BaseAction {
     public:
         Close();
         void act(WareHouse &wareHouse) override{
-            for (auto* order:)
+            for (int i=1 ; i<=wareHouse.getOrderCounter();i++){
+                PrintOrderStatus print(i);
+                print.act();
+
+            }
+                
+             
         };
         Close *clone() const override{return new Close(*this);};
         string toString() const override{return "close";};
