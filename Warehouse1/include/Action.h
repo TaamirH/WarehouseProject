@@ -78,6 +78,7 @@ class AddVolunteer : public BaseAction {
         void act(WareHouse &wareHouse) override;
         AddVolunteer *clone() const override;
         std::string toString() const override;
+        std::string OSToString(OrderStatus _orderStatus) const;
     private:
         const std::string name;
         const std::string volunteerType;

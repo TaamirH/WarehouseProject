@@ -117,7 +117,7 @@ enum class CustomerType{
             throw std::invalid_argument("Invalid customer type string");
     }
 }
-    string CTToString(CustomerType _customerType) const{
+    std::string AddCustomer ::CTToString(CustomerType _customerType) {
         if (_customerType== CustomerType::Soldier)
             return "Soldier";
         else if (_customerType==CustomerType::Civilian)
@@ -128,10 +128,10 @@ enum class CustomerType{
 
 
 
-        AddCustomer(string _customerName, string _customerType, int _distance, int _maxOrders):
+        AddCustomer ::AddCustomer(std::string _customerName, std::string _customerType, int _distance, int _maxOrders):
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
-        void act(WareHouse &wareHouse) override{ 
+        void AddCustomer ::act(WareHouse &wareHouse) { 
             CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
                  customerName, distance, maxOrders);
             if (customerType==CustomerType::Soldier){
@@ -142,24 +142,22 @@ enum class CustomerType{
             complete();
             wareHouse.addAction(this);
         }
-        AddCustomer *clone() const override{return new AddCustomer(*this);}
-        string toString() const override {return "customer "+ customerName + CTToString(customerType)
+        AddCustomer * AddCustomer ::clone() const {return new AddCustomer(*this);}
+        std::string AddCustomer ::toString() const {return "customer "+ customerName + CTToString(customerType)
          + std::to_string(distance) + std::to_string(maxOrders);}
-    private:
-        const string customerName;
-        const CustomerType customerType;
-        const int distance;
-        const int maxOrders;
-};
+    // private:
+    //     const string customerName;
+    //     const CustomerType customerType;
+    //     const int distance;
+    //     const int maxOrders;
 
 
-class AddVolunteer : public BaseAction {
 
-public:
-        AddVolunteer(string _name, string _volunteerType, int _coolDown,  int _maxOrders, int _maxDistance, int _distancePerStep):
+
+        AddVolunteer ::AddVolunteer(std::string _name, std::string _volunteerType, int _coolDown,  int _maxOrders, int _maxDistance, int _distancePerStep):
         name{name}, volunteerType{_volunteerType}, cooldown{_coolDown}, maxOrders{_maxOrders}, 
         maxDistance{_maxDistance}, distancePerStep{_distancePerStep}{};
-        void act(WareHouse &wareHouse) override{ 
+        void AddVolunteer ::act(WareHouse &wareHouse) { 
             CollectorVolunteer* vol =new CollectorVolunteer(wareHouse.getVolunteerCounter()
             , name, cooldown);
         
@@ -188,8 +186,8 @@ public:
             
         }
 
-        AddVolunteer *clone() const override {return new AddVolunteer(*this);}
-        string toString() const override {string s = "volunteer " +name + " "+ volunteerType + " ";
+        AddVolunteer * AddVolunteer ::clone() const {return new AddVolunteer(*this);}
+        std::string AddVolunteer ::toString() const {std::string s = "volunteer " +name + " "+ volunteerType + " ";
         if (volunteerType=="collector")
             s= s + std::to_string(cooldown);
         
@@ -205,21 +203,20 @@ public:
         
         }
 
-    private:
-        const string name;
-        const string volunteerType;
-        const int cooldown;
-        const int maxOrders;
-        const int maxDistance;
-        const int distancePerStep;
-};
+//     private:
+//         const string name;
+//         const string volunteerType;
+//         const int cooldown;
+//         const int maxOrders;
+//         const int maxDistance;
+//         const int distancePerStep;
+
         
 
 
 
-class PrintOrderStatus : public BaseAction {
-    public:
-            string OSToString(OrderStatus _orderStatus) const{
+
+    std::string PrintOrderStatus ::OSToString(OrderStatus _orderStatus) {
         if (_orderStatus== OrderStatus::PENDING)
             return "Pending";
         else if (_orderStatus==OrderStatus::COLLECTING)
@@ -232,9 +229,9 @@ class PrintOrderStatus : public BaseAction {
             throw std::invalid_argument("Invalid customer type string");
     }
 
-        PrintOrderStatus(int id):orderId(id){};
+        PrintOrderStatus ::PrintOrderStatus(int id):orderId(id){};
 
-        void act(WareHouse &wareHouse) override {
+        void PrintOrderStatus ::act(WareHouse &wareHouse) override {
 
         if (orderId>wareHouse.getOrderCounter() || orderId<0)
             error("Order doesn't exist");
@@ -254,13 +251,13 @@ class PrintOrderStatus : public BaseAction {
         complete();}
         wareHouse.addAction(this);
         }
-        PrintOrderStatus *clone() const override{return new PrintOrderStatus(*this);}
-        string toString() const override{return "orderStatus" + std::to_string(orderId);}
-    private:
-        const int orderId;
-};
+        PrintOrderStatus * PrintOrderStatus ::clone() const override{return new PrintOrderStatus(*this);}
+        string PrintOrderStatus ::toString() const override{return "orderStatus" + std::to_string(orderId);}
+    // private:
+        // const int orderId;
 
-class PrintCustomerStatus: public BaseAction {
+
+class PrintCustomerStatus:: public BaseAction {
     public:
         PrintCustomerStatus(int _customerId):customerId{_customerId}{};
         void act(WareHouse &wareHouse) override{
