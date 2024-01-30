@@ -370,9 +370,9 @@ class Close : public BaseAction {
         void act(WareHouse &wareHouse) override{
             for (int i=1 ; i<=wareHouse.getOrderCounter();i++){
                 PrintOrderStatus print(i);
-                print.act();
-
+                print.act(wareHouse);
             }
+            wareHouse.close();
                 
              
         };
