@@ -60,7 +60,7 @@ class AddOrder : public BaseAction {
 class AddCustomer : public BaseAction {
     public:
         CustomerType toCustomerType(const std::string& str);
-        std::string CTToString(CustomerType _customerType);
+        std::string CTToString(CustomerType _customerType) const;
         AddCustomer(std::string customerName, std::string customerType, int distance, int maxOrders);
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override;

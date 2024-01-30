@@ -117,7 +117,7 @@ enum class CustomerType{
             throw std::invalid_argument("Invalid customer type string");
     }
 }
-    std::string AddCustomer ::CTToString(CustomerType _customerType) {
+    std::string AddCustomer ::CTToString(CustomerType _customerType) const{
         if (_customerType== CustomerType::Soldier)
             return "Soldier";
         else if (_customerType==CustomerType::Civilian)
@@ -143,7 +143,7 @@ enum class CustomerType{
             wareHouse.addAction(this);
         }
         AddCustomer * AddCustomer ::clone() const {return new AddCustomer(*this);}
-        std::string AddCustomer ::toString() const {return "customer "+ customerName + CTToString(customerType)
+        std::string AddCustomer ::toString() const {return "customer "+ customerName + " "+ CTToString(customerType)
          + std::to_string(distance) + std::to_string(maxOrders);}
     // private:
     //     const string customerName;
@@ -231,7 +231,7 @@ enum class CustomerType{
 
         PrintOrderStatus ::PrintOrderStatus(int id):orderId(id){};
 
-        void PrintOrderStatus ::act(WareHouse &wareHouse) override {
+        void PrintOrderStatus ::act(WareHouse &wareHouse)  {
 
         if (orderId>wareHouse.getOrderCounter() || orderId<0)
             error("Order doesn't exist");
@@ -251,16 +251,15 @@ enum class CustomerType{
         complete();}
         wareHouse.addAction(this);
         }
-        PrintOrderStatus * PrintOrderStatus ::clone() const override{return new PrintOrderStatus(*this);}
-        string PrintOrderStatus ::toString() const override{return "orderStatus" + std::to_string(orderId);}
+        PrintOrderStatus * PrintOrderStatus ::clone() const {return new PrintOrderStatus(*this);}
+        string PrintOrderStatus ::toString() const {return "orderStatus" + std::to_string(orderId);}
     // private:
         // const int orderId;
 
 
-class PrintCustomerStatus:: public BaseAction {
-    public:
-        PrintCustomerStatus(int _customerId):customerId{_customerId}{};
-        void act(WareHouse &wareHouse) override{
+
+        PrintCustomerStatus::PrintCustomerStatus(int _customerId):customerId{_customerId}{};
+        void PrintCustomerStatus::act(WareHouse &wareHouse) {
 
         if (customerId>wareHouse.getCustomerCounter() || customerId<0){
             error("Customer doesn't exist");
@@ -281,17 +280,14 @@ class PrintCustomerStatus:: public BaseAction {
         wareHouse.addAction(this);
         }
 
-        PrintCustomerStatus *clone() const override{return new PrintCustomerStatus(*this);}
-        string toString() const override{return "customerStatus " + std::to_string(customerId);}
-    private:
-        const int customerId;
-};
+        PrintCustomerStatus * PrintCustomerStatus::clone() const {return new PrintCustomerStatus(*this);}
+        string PrintCustomerStatus::toString() const {return "customerStatus " + std::to_string(customerId);}
+    // private:
+        // const int customerId;
 
 
-class PrintVolunteerStatus : public BaseAction {
-    public:
-        PrintVolunteerStatus(int id):volunteerId{id}{};
-        void act(WareHouse &_wareHouse) override{
+        PrintVolunteerStatus ::PrintVolunteerStatus(int id):volunteerId{id}{};
+        void PrintVolunteerStatus ::act(WareHouse &_wareHouse) {
             if (volunteerId>_wareHouse.getVolunteerCounter() || volunteerId<0){
                 error("Volunteer doesn't exist");
             }else{
@@ -337,29 +333,25 @@ class PrintVolunteerStatus : public BaseAction {
                 _wareHouse.addAction(this);
 }
 
-        PrintVolunteerStatus *clone() const override{return new PrintVolunteerStatus(*this);}
-        string toString() const override{return "volunteerStatus " + std::to_string(volunteerId);}
-    private:
-        const int volunteerId;
-};
+        PrintVolunteerStatus * PrintVolunteerStatus ::clone() const {return new PrintVolunteerStatus(*this);}
+        std::string PrintVolunteerStatus ::toString() const {return "volunteerStatus " + std::to_string(volunteerId);}
+    // private:
+    //     const int volunteerId;
 
 
-class PrintActionsLog : public BaseAction {
-    public:
-        PrintActionsLog();
-        void act(WareHouse &wareHouse) override{wareHouse.printActionsLogs();
+        PrintActionsLog ::PrintActionsLog(){};
+        void PrintActionsLog ::act(WareHouse &wareHouse) {wareHouse.printActionsLogs();
         complete();
         wareHouse.addAction(this);
         }
-        PrintActionsLog *clone() const override{return new PrintActionsLog(*this);}
-        string toString() const override{return "log";}
-    private:
-};
+        PrintActionsLog* PrintActionsLog ::clone() const {return new PrintActionsLog(*this);}
+        std::string PrintActionsLog ::toString() const {return "log";}
+    // private:
 
-class Close : public BaseAction {
-    public:
-        Close();
-        void act(WareHouse &wareHouse) override{
+
+
+        Close::Close(){}
+        void Close::act(WareHouse &wareHouse) {
             for (int i=1 ; i<=wareHouse.getOrderCounter();i++){
                 PrintOrderStatus print(i);
                 print.act(wareHouse);
@@ -368,27 +360,23 @@ class Close : public BaseAction {
                 
              
         };
-        Close *clone() const override{return new Close(*this);};
-        string toString() const override{return "close";};
-    private:
-};
+        Close * Close::clone() const {return new Close(*this);};
+        std::string Close::toString() const {return "close";};
+    // private:
 
-class BackupWareHouse : public BaseAction {
-    public:
-        BackupWareHouse();
-        void act(WareHouse &wareHouse) override{
+
+        BackupWareHouse ::BackupWareHouse(){}
+        void BackupWareHouse ::act(WareHouse &wareHouse) {
             backup = &wareHouse;
         };
-        BackupWareHouse *clone() const override{return new BackupWareHouse(*this);};
-        string toString() const override{return "backup";};
-    private:
-};
+        BackupWareHouse* BackupWareHouse :: clone() const {return new BackupWareHouse(*this);};
+        std::string BackupWareHouse ::toString() const {return "backup";};
 
 
-class RestoreWareHouse : public BaseAction {
-    public:
-        RestoreWareHouse();
-        void act(WareHouse &wareHouse) override{
+
+
+        RestoreWareHouse ::RestoreWareHouse(){}
+        void RestoreWareHouse ::act(WareHouse &wareHouse) {
             if (backup== nullptr){
                 error("No backup available");
             }
@@ -396,7 +384,5 @@ class RestoreWareHouse : public BaseAction {
                 wareHouse=*backup;
                         
         };
-        RestoreWareHouse *clone() const override{return new RestoreWareHouse(*this);};
-        string toString() const override{return "restore";};
-    private:
-};
+        RestoreWareHouse * RestoreWareHouse ::clone() const {return new RestoreWareHouse(*this);};
+        std::string RestoreWareHouse ::toString() const{return "restore";};
