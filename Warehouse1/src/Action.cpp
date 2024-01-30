@@ -84,8 +84,9 @@ extern WareHouse* backup;
                 error("Cannot place this order");
             else if (wareHouse.getCustomer(customerId).canMakeOrder()){
 
-            Order* newOrd = new Order (wareHouse.getOrderCounter(), customerId,
-             wareHouse.getCustomer(customerId).getCustomerDistance());
+            auto theCos = wareHouse.getCustomer(customerId);
+            Order* newOrd = new Order (theCos.addOrder(wareHouse.getOrderCounter())
+            , customerId, theCos.getCustomerDistance());
             wareHouse.addOrder(newOrd);
             complete();
             }else

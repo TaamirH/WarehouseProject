@@ -263,7 +263,7 @@ class Order;
         void WareHouse::start(){
             open();
             while (isOpen){
-                std::cout << "What do you want to do? ";
+                std::cout << "\nWhat do you want to do? ";
                 std::string input;
                 std::getline(std::cin, input);  // Read entire line of input    
                 std::stringstream ss(input);
