@@ -44,12 +44,12 @@ using std::vector;
         SimulateStep ::SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}
 
         void SimulateStep ::act(WareHouse &wareHouse) {
-            
+            std::cout<<"firststep";
             
             for (auto* vol : wareHouse.getVolunteers()){
                 for (Order* ord : wareHouse.getPendingOrders()){
                     if(vol->canTakeOrder(*ord)){
-                    
+                        std::cout<<"pendingOrdersLoop";
                         vol->acceptOrder( *ord);
                         ord->setCollectorId(vol->getId());
                         ord->setStatus(OrderStatus::COLLECTING);
@@ -80,19 +80,35 @@ using std::vector;
 
         AddOrder ::AddOrder(int id): customerId{id}{};
         void AddOrder ::act(WareHouse &wareHouse) {
-            if (customerId>wareHouse.getCustomerCounter() || customerId<0)
-                error("Cannot place this order");
-            else if (wareHouse.getCustomer(customerId).canMakeOrder()){
+            // if (customerId>wareHouse.getCustomerCounter() || customerId<0)
+            //     error("Cannot place this order");
+            // else if (wareHouse.getCustomer(customerId).canMakeOrder()){
 
-            Order* newOrd = new Order (wareHouse.getCustomer(customerId).addOrder(wareHouse.getOrderCounter())
-            , customerId, wareHouse.getCustomer(customerId).getCustomerDistance());
-            wareHouse.addOrder(newOrd);
-            complete();
-            }else
-            error("Cannot place this order");
+            // Order* newOrd = new Order (wareHouse.getCustomer(customerId).addOrder(wareHouse.getOrderCounter())
+            // , customerId, wareHouse.getCustomer(customerId).getCustomerDistance());
+            // wareHouse.addOrder(newOrd);
+            // complete();
+            // }else{
+            //     error("Cannot place this order");
+            // }
+            // wareHouse.addAction(this);
 
-            wareHouse.addAction(this);
+    const Customer& customer = wareHouse.getCustomer(customerId);
 
+  if (customerId < 0 || customerId > wareHouse.getCustomerCounter() || 
+      !customer.canMakeOrder()) {
+    error("Cannot place this order");
+    return; // Early return on error
+  }
+
+  int orderId = wareHouse.getOrderCounter();
+
+   Order* newOrderPtr = new Order(orderId, customerId, customer.getCustomerDistance());
+
+  wareHouse.addOrder(newOrderPtr);
+
+  complete();
+  wareHouse.addAction(this);
             }
         std::string AddOrder ::toString() const {return "order " + std::to_string(customerId);}
         AddOrder * AddOrder ::clone() const {return new AddOrder(*this);}
@@ -355,9 +371,11 @@ using std::vector;
 
 
 
-        Close::Close(){}
+        Close::Close(){};
         void Close::act(WareHouse &wareHouse) {
+            std::cout<<"close::close:act";
             for (int i=1 ; i<=wareHouse.getOrderCounter();i++){
+                std::cout<<"IIIIIIIIII"+i;
                 PrintOrderStatus print(i);
                 print.act(wareHouse);
             }

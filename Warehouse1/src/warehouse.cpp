@@ -300,7 +300,7 @@ class Order;
                             int maxOrders = std::stoi(tokens[4]);
                             BaseAction* action = new AddCustomer(customerName, customerType, customerDistance, maxOrders);
                             action->act(*this);
-                            delete action;    
+                               
                         } catch (std::invalid_argument& e) {
                             std::cout << "Invalid input: customer arguments must be strings and integers\n";
                         }
@@ -461,15 +461,21 @@ class Order;
 
         };
         Order& WareHouse::getOrder(int orderId) const{
-            for (const auto& orders : {&pendingOrders, &inProcessOrders, &completedOrders}) {
-                for (const auto& orderPtr : *orders) {
-                    if (orderPtr->getId() == orderId) {
-                        return *orderPtr;
+            for (const auto& order : pendingOrders) {
+                    if (order->getId() == orderId) {
+                        return *order;
             }
         }
+            for (const auto& order : inProcessOrders) {
+                    if (order->getId() == orderId) {
+                        return *order;
     }
+            }
+            for (const auto& order : completedOrders) {
+                    if (order->getId() == orderId) {
+                        return *order;}}
 
-    throw std::runtime_error("Order not found"); // Or return a nullptr if preferred
+    //throw std::runtime_error("Order not found???"); // Or return a nullptr if preferred
 
         };
         int WareHouse::getCustomerCounter() const{
