@@ -45,6 +45,7 @@ class WareHouse {
         void open();
         void moveOrder(Order *order,int id);
         void deleteVol(Volunteer* vol);
+        const vector <int>& getDeletedVolunteers() const;
     private:
         bool isOpen;
         vector<BaseAction*> actionsLog;
@@ -56,5 +57,6 @@ class WareHouse {
         int customerCounter; //For assigning unique customer IDs
         int volunteerCounter; //For assigning unique volunteer IDs
         int orderCounter;
+        vector <int> deletedVolunteers;
 
 };

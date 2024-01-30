@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 class WareHouse;
 #include "../include/Customer.h"
 class volunteer;
@@ -288,7 +289,9 @@ enum class CustomerType{
 
         PrintVolunteerStatus ::PrintVolunteerStatus(int id):volunteerId{id}{};
         void PrintVolunteerStatus ::act(WareHouse &_wareHouse) {
-            if (volunteerId>_wareHouse.getVolunteerCounter() || volunteerId<0){
+            auto it = std::find(_wareHouse.getDeletedVolunteers().begin(),
+             _wareHouse.getDeletedVolunteers().end(), volunteerId);
+            if (volunteerId>_wareHouse.getVolunteerCounter() || volunteerId<0 ||(it != _wareHouse.getDeletedVolunteers().end()) ) {
                 error("Volunteer doesn't exist");
             }else{
             Volunteer &vol =_wareHouse.getVolunteer(volunteerId);

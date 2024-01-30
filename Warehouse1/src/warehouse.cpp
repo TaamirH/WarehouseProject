@@ -368,19 +368,19 @@ class Order;
                     int id= std::stoi(tokens[1]);
                     BaseAction* action = new PrintOrderStatus(id);
                     action ->act(*this);
-                    delete action;
+                    
                 }
                 else if (tokens[0]=="customerStatus"){
                     int id =std::stoi(tokens[1]);
                     BaseAction* action= new PrintCustomerStatus(id);
                     action ->act(*this);
-                    delete action;
+                    
                 }
                 else if (tokens[0]=="volunteerStatus"){
                     int id =std::stoi(tokens[1]);
                     BaseAction* action= new PrintVolunteerStatus(id);
                     action ->act(*this);
-                    delete action;
+                    
                 }
                 else if (tokens[0]=="log"){
                     BaseAction* action = new PrintActionsLog();
@@ -390,17 +390,17 @@ class Order;
                 else if (tokens[0]=="close"){
                     BaseAction* action = new Close();
                     action ->act(*this);
-                    delete action;
+                    
                 }
                 else if (tokens[0]=="backup"){
                     BaseAction* action = new BackupWareHouse();
                     action ->act(*this);
-                    delete action;
+                    
                 }
                 else if (tokens[0]=="restore"){
                     BaseAction* action = new RestoreWareHouse();
                     action ->act(*this);
-                    delete action;
+                    
                 }
 
 
@@ -523,6 +523,8 @@ class Order;
         void WareHouse::deleteVol(Volunteer* vol){
             auto it = std::find(volunteers.begin(), volunteers.end(),vol);
             volunteers.erase(it);
+            deletedVolunteers.push_back(vol->getId());
+
         }
         
     // private:
