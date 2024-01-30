@@ -57,7 +57,7 @@ class order;
     
     
         // const int coolDown; // The time it takes the volunteer to process an order
-        // int timeLeft; // Time left until the volunteer finishes his current order
+        //// int timeLeft; // Time left until the volunteer finishes his current order
 
 
         LimitedCollectorVolunteer::LimitedCollectorVolunteer(int _id, const string &_name, int _coolDown ,int _maxOrders):

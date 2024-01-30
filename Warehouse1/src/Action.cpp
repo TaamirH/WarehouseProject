@@ -367,7 +367,9 @@ class PrintActionsLog : public BaseAction {
 class Close : public BaseAction {
     public:
         Close();
-        void act(WareHouse &wareHouse) override;
+        void act(WareHouse &wareHouse) override{
+            for (auto* order:)
+        };
         Close *clone() const override{return new Close(*this);};
         string toString() const override{return "close";};
     private:
