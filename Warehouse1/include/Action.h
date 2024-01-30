@@ -6,6 +6,7 @@ class WareHouse;
 using std::string;
 using std::vector;
 
+
 enum class ActionStatus{
     COMPLETED, ERROR
 };
@@ -20,16 +21,16 @@ class BaseAction{
         BaseAction();
         ActionStatus getStatus() const;
         virtual void act(WareHouse& wareHouse)=0;
-        virtual string toString() const=0;
+        virtual std::string toString() const=0;
         virtual BaseAction* clone() const=0;
 
     protected:
         void complete();
-        void error(string errorMsg);
-        string getErrorMsg() const;
+        void error(std::string errorMsg);
+        std::string getErrorMsg() const;
 
     private:
-        string errorMsg;
+        std::string errorMsg;
         ActionStatus status;
 };
 
@@ -49,7 +50,7 @@ class AddOrder : public BaseAction {
     public:
         AddOrder(int id);
         void act(WareHouse &wareHouse) override;
-        string toString() const override;
+        std::string toString() const override;
         AddOrder *clone() const override;
     private:
         const int customerId;
@@ -59,13 +60,13 @@ class AddOrder : public BaseAction {
 class AddCustomer : public BaseAction {
     public:
         CustomerType toCustomerType(const std::string& str);
-        string CTToString(CustomerType _customerType);
-        AddCustomer(string customerName, string customerType, int distance, int maxOrders);
+        std::string CTToString(CustomerType _customerType);
+        AddCustomer(std::string customerName, std::string customerType, int distance, int maxOrders);
         void act(WareHouse &wareHouse) override;
         AddCustomer *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
-        const string customerName;
+        const std::string customerName;
         const CustomerType customerType;
         const int distance;
         const int maxOrders;
@@ -73,13 +74,13 @@ class AddCustomer : public BaseAction {
 
 class AddVolunteer : public BaseAction {
     public:
-        AddVolunteer(string name, string volunteerType, int coolDown,  int maxOrders, int maxDistance, int distancePerStep);
+        AddVolunteer(std::string name, std::string volunteerType, int coolDown,  int maxOrders, int maxDistance, int distancePerStep);
         void act(WareHouse &wareHouse) override;
         AddVolunteer *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
-        const string name;
-        const string volunteerType;
+        const std::string name;
+        const std::string volunteerType;
         const int cooldown;
         const int maxOrders;
         const int maxDistance;
@@ -90,11 +91,11 @@ class AddVolunteer : public BaseAction {
 
 class PrintOrderStatus : public BaseAction {
     public:
-        string OSToString(OrderStatus _orderStatus);
+        std::string OSToString(OrderStatus _orderStatus);
         PrintOrderStatus(int id);
         void act(WareHouse &wareHouse) override;
         PrintOrderStatus *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
         const int orderId;
 };
@@ -104,7 +105,7 @@ class PrintCustomerStatus: public BaseAction {
         PrintCustomerStatus(int customerId);
         void act(WareHouse &wareHouse) override;
         PrintCustomerStatus *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
         const int customerId;
 };
@@ -115,7 +116,7 @@ class PrintVolunteerStatus : public BaseAction {
         PrintVolunteerStatus(int id);
         void act(WareHouse &wareHouse) override;
         PrintVolunteerStatus *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
         const int volunteerId;
 };
@@ -126,7 +127,7 @@ class PrintActionsLog : public BaseAction {
         PrintActionsLog();
         void act(WareHouse &wareHouse) override;
         PrintActionsLog *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
 };
 
@@ -135,7 +136,7 @@ class Close : public BaseAction {
         Close();
         void act(WareHouse &wareHouse) override;
         Close *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
 };
 
@@ -144,7 +145,7 @@ class BackupWareHouse : public BaseAction {
         BackupWareHouse();
         void act(WareHouse &wareHouse) override;
         BackupWareHouse *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
 };
 
@@ -154,6 +155,6 @@ class RestoreWareHouse : public BaseAction {
         RestoreWareHouse();
         void act(WareHouse &wareHouse) override;
         RestoreWareHouse *clone() const override;
-        string toString() const override;
+        std::string toString() const override;
     private:
 };
