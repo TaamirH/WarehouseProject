@@ -30,7 +30,7 @@ class Order;
         size_t firstNonSpace = str.find_first_not_of(" \t");
             if (firstNonSpace == std::string::npos)
     {
-        // The string is all spaces, return an empty string
+        // empty string
                 return "";
     }
     return str.substr(firstNonSpace);
@@ -45,44 +45,39 @@ class Order;
             return;
         }
 
-    // Variable to store each line
+    // line var
         std::string line;
 
-    // Read and parse the file content
+    // read file and parse
         while (std::getline(inputFile, line))
         {
             if (!line.empty())
             {
-            // Find the position of #
+            // Find #
                 size_t posHash = line.find('#');
                 std::string partBeforeHash;
-            // Extract the part before #
+            // Extract #
                 if (posHash != std::string::npos)
                     partBeforeHash = line.substr(0, posHash);
 
-            // Trim leading whitespace from the line
+            // Trim first backspace
                 std::string trimmedLine = trimLeadingWhitespace(partBeforeHash);
                 if (!trimmedLine.empty())
                 {
                     std::cout << trimmedLine << std::endl;
 
-                // Now parse each line and insert into database
-                // Vector to store parsed words
+                // parse  line and insert into database
                     std::istringstream iss(trimmedLine);
                     std::vector<std::string> words;
                     std::string word;
-                // breaking down the line into words.
+                // breaking down line into words.
                     while (std::getline(iss, word, ' '))
                     {
                         words.push_back(word);
                     }
-                // Add the last word (or the only word if no space is found)
-                // words.push_back(trimmedLine);
+                // Add the last word 
 
-                // Now the line is stored word by word in words variable.
-                // for customer
 
-                // Inset data
                     if (words[0] == "customer")
                     {
                     // words[0] contains the role
@@ -112,22 +107,22 @@ class Order;
                     {
                         try
                         {
-                            if (words[2] == "collector") // Recieves a 4 word input
+                            if (words[2] == "collector") // 4 word input
                             {
                                 volunteers.push_back(new CollectorVolunteer(getVolunteerCounter(), words[1], std::stoi(words[3])));
                                 ++volunteerCounter;
                             }
-                            else if (words[2] == "limited_collector") // Recieves a 5 word input
+                            else if (words[2] == "limited_collector") //  5 word input
                             {
                                 volunteers.push_back(new LimitedCollectorVolunteer(getVolunteerCounter(), words[1], std::stoi(words[3]), std::stoi(words[4])));
                                 ++volunteerCounter;
                             }
-                            else if (words[2] == "driver") // Recieves a 5 word input
+                            else if (words[2] == "driver") // 5 word input
                             {
                                 volunteers.push_back(new DriverVolunteer(getVolunteerCounter(), words[1], std::stoi(words[3]), std::stoi(words[4])));
                                 ++volunteerCounter;
                             }
-                            else if (words[2] == "limited_driver") // Recieves a 6 word input
+                            else if (words[2] == "limited_driver") //  6 word input
                             {
                                 volunteers.push_back(new LimitedDriverVolunteer(getVolunteerCounter(), words[1], std::stoi(words[3]), std::stoi(words[4]), std::stoi(words[5])));
                                 ++volunteerCounter;
