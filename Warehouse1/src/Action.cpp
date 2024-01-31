@@ -41,19 +41,17 @@ using std::vector;
 
 
 
-        SimulateStep ::SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{}
+        SimulateStep ::SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{};
 
         void SimulateStep ::act(WareHouse &wareHouse) {
-            std::cout<<"firststep";
             
             for (auto* vol : wareHouse.getVolunteers()){
                 for (Order* ord : wareHouse.getPendingOrders()){
                     if(vol->canTakeOrder(*ord)){
-                        std::cout<<"pendingOrdersLoop";
                         vol->acceptOrder( *ord);
                         ord->setCollectorId(vol->getId());
                         ord->setStatus(OrderStatus::COLLECTING);
-                        wareHouse.moveOrder(ord, vol->getId());
+                        // wareHouse.moveOrder(ord, vol->getId());
                     }
                 }}  
                 for (auto* vol : wareHouse.getVolunteers()){

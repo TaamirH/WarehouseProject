@@ -80,11 +80,7 @@ class Order;
 
                     if (words[0] == "customer")
                     {
-                    // words[0] contains the role
-                    // words[1] contains the name
-                    // words[2] contains the type
-                    // words[3] contains the distance
-                    // words[4] contains the max orders number
+                   
                         try
                         {
                             if (words[2] == "soldier")
@@ -274,17 +270,20 @@ class Order;
                     std::cout << "Invalid input: no command specified\n";
                     continue;
                 }
-
-                if (tokens[0] == "step") {
-                    std::cout<<tokens[1];
+                // std::cout <<tokens[0];
+                else if (tokens.size()==2 && tokens[0] == "step") {
+                    std::cout<<"step";
                     int numberOfSteps = std::stoi(tokens[1]);
+                    std::cout<<tokens[1];
                     BaseAction* action = new SimulateStep(numberOfSteps);  // Create using new
                     action->act(*this);
+                    actionsLog.push_back(action);
                     
-                } else if (tokens[0] == "order") {
+                } else if (tokens.size()==2 && tokens[0] == "order") {
                     int customerId = std::stoi(tokens[1]);
                     BaseAction* action = new AddOrder(customerId);  // Create using new
                     action->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
                 else if (tokens[0] == "customer") {
@@ -298,6 +297,7 @@ class Order;
                             int maxOrders = std::stoi(tokens[4]);
                             BaseAction* action = new AddCustomer(customerName, customerType, customerDistance, maxOrders);
                             action->act(*this);
+                            actionsLog.push_back(action);
                                
                         } catch (std::invalid_argument& e) {
                             std::cout << "Invalid input: customer arguments must be strings and integers\n";
@@ -357,49 +357,58 @@ class Order;
                                 }
                             }
                             BaseAction* action = new AddVolunteer(volunteerName, volunteerType, 0, maxOrders, maxDistance, distancePerStep);  // Set coolDown to 0 for drivers
-            // ...
+                            action->act(*this);
+                            actionsLog.push_back(action);
+
                         } else {
                             std::cout << "Invalid volunteer type: " << volunteerType << "\n";
                         }
                     }
                 }
 
-                else if (tokens[0]=="orderStatus")  {
+                else if (tokens.size()==2 && tokens[0]=="orderStatus")  {
                     int id= std::stoi(tokens[1]);
                     BaseAction* action = new PrintOrderStatus(id);
                     action ->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
-                else if (tokens[0]=="customerStatus"){
+                else if (tokens.size()==2 && tokens[0]=="customerStatus"){
                     int id =std::stoi(tokens[1]);
                     BaseAction* action= new PrintCustomerStatus(id);
                     action ->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
-                else if (tokens[0]=="volunteerStatus"){
+                else if (tokens.size()==2 && tokens[0]=="volunteerStatus"){
                     int id =std::stoi(tokens[1]);
                     BaseAction* action= new PrintVolunteerStatus(id);
                     action ->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
-                else if (tokens[0]=="log"){
+                else if (tokens.size()==1 && tokens[0]=="log"){
                     BaseAction* action = new PrintActionsLog();
                     action ->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
-                else if (tokens[0]=="close"){
+                else if (tokens.size()==1 && tokens[0]=="close"){
                     BaseAction* action = new Close();
                     action ->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
-                else if (tokens[0]=="backup"){
+                else if (tokens.size()==1 && tokens[0]=="backup"){
                     BaseAction* action = new BackupWareHouse();
                     action ->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
-                else if (tokens[0]=="restore"){
+                else if (tokens.size()==1 && tokens[0]=="restore"){
                     BaseAction* action = new RestoreWareHouse();
                     action ->act(*this);
+                    actionsLog.push_back(action);
                     
                 }
 
@@ -528,8 +537,10 @@ class Order;
         }
         void WareHouse::deleteVol(Volunteer* vol){
             auto it = std::find(volunteers.begin(), volunteers.end(),vol);
+            int deletedid = vol->getId();
+            delete vol;
             volunteers.erase(it);
-            deletedVolunteers.push_back(vol->getId());
+            deletedVolunteers.push_back(deletedid);
 
         }
         const vector <int>& WareHouse::getDeletedVolunteers() const{ return deletedVolunteers;}
