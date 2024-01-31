@@ -98,12 +98,13 @@ using std::vector;
   if (customerId < 0 || customerId > wareHouse.getCustomerCounter() || 
       !customer.canMakeOrder()) {
     error("Cannot place this order");
+    wareHouse.addAction(this);
     return; // Early return on error
   }
 
   int orderId = wareHouse.getOrderCounter();
 
-   Order* newOrderPtr = new Order(orderId, customerId, customer.getCustomerDistance());
+   Order* newOrderPtr = new Order(wareHouse.getCustomer(customerId).addOrder(orderId), customerId, customer.getCustomerDistance());
 
   wareHouse.addOrder(newOrderPtr);
 
@@ -258,6 +259,10 @@ using std::vector;
             std::cout<<"\nNone";
         else
         "\nDriverID: " +std::to_string (_order.getDriverId());
+        if (_order.getCollectorId() == NO_VOLUNTEER)
+            std::cout<<"\nNone";
+        else
+        "\nCollectorID: " +std::to_string (_order.getCollectorId());
         complete();}
         wareHouse.addAction(this);
         }
@@ -373,11 +378,12 @@ using std::vector;
 
         Close::Close(){};
         void Close::act(WareHouse &wareHouse) {
-            std::cout<<"close::close:act";
-            for (int i=1 ; i<=wareHouse.getOrderCounter();i++){
-                std::cout<<"IIIIIIIIII"+i;
-                PrintOrderStatus print(i);
-                print.act(wareHouse);
+            PrintOrderStatus print = PrintOrderStatus(410);
+            for (int i=0 ; i<wareHouse.getOrderCounter();i++){
+                Order &order = wareHouse.getOrder(i);
+                std::cout<<"OrderID: " + std::to_string(i) +
+                ", CustomerID: " + std::to_string(order.getCustomerId()) + 
+                ", OrderStatus: " + print.OSToString(order.getStatus()) +"\n";
             }
             wareHouse.close();
             complete();
@@ -390,7 +396,7 @@ using std::vector;
 
         BackupWareHouse ::BackupWareHouse(){}
         void BackupWareHouse ::act(WareHouse &wareHouse) {
-            backup = &wareHouse;
+            backup = new WareHouse(wareHouse);
             complete();
             wareHouse.addAction(this);
         };
@@ -405,9 +411,10 @@ using std::vector;
             if (backup== nullptr){
                 error("No backup available");
             }
-            else
+            else{
                 wareHouse=*backup;
             complete();
+            }
             wareHouse.addAction(this);
                         
         };

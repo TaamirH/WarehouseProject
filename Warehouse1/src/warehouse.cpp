@@ -185,6 +185,8 @@ class Order;
                 customerCounter=other.customerCounter;
                 volunteerCounter=other.volunteerCounter;
                 orderCounter=other.orderCounter;
+                
+                //delete all
                 actionsLog.clear();
                 volunteers.clear();
                 pendingOrders.clear();
@@ -279,6 +281,7 @@ class Order;
                 }
 
                 if (tokens[0] == "step") {
+                    std::cout<<tokens[1];
                     int numberOfSteps = std::stoi(tokens[1]);
                     BaseAction* action = new SimulateStep(numberOfSteps);  // Create using new
                     action->act(*this);
