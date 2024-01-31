@@ -64,7 +64,6 @@ using std::vector;
                     }
                 }
                 complete();
-                wareHouse.addAction(this);
         }
         
     
@@ -78,25 +77,13 @@ using std::vector;
 
         AddOrder ::AddOrder(int id): customerId{id}{};
         void AddOrder ::act(WareHouse &wareHouse) {
-            // if (customerId>wareHouse.getCustomerCounter() || customerId<0)
-            //     error("Cannot place this order");
-            // else if (wareHouse.getCustomer(customerId).canMakeOrder()){
 
-            // Order* newOrd = new Order (wareHouse.getCustomer(customerId).addOrder(wareHouse.getOrderCounter())
-            // , customerId, wareHouse.getCustomer(customerId).getCustomerDistance());
-            // wareHouse.addOrder(newOrd);
-            // complete();
-            // }else{
-            //     error("Cannot place this order");
-            // }
-            // wareHouse.addAction(this);
 
     const Customer& customer = wareHouse.getCustomer(customerId);
 
   if (customerId < 0 || customerId > wareHouse.getCustomerCounter() || 
       !customer.canMakeOrder()) {
     error("Cannot place this order");
-    wareHouse.addAction(this);
     return; // Early return on error
   }
 
@@ -107,7 +94,6 @@ using std::vector;
   wareHouse.addOrder(newOrderPtr);
 
   complete();
-  wareHouse.addAction(this);
             }
         std::string AddOrder ::toString() const {return "order " + std::to_string(customerId);}
         AddOrder * AddOrder ::clone() const {return new AddOrder(*this);}
@@ -149,7 +135,6 @@ using std::vector;
                  customerName, distance, maxOrders);}
             wareHouse.addCustomer(cos);
             complete();
-            wareHouse.addAction(this);
         }
         AddCustomer * AddCustomer ::clone() const {return new AddCustomer(*this);}
         std::string AddCustomer ::toString() const {return "customer "+ customerName + " "+ CTToString(customerType)
@@ -190,7 +175,6 @@ using std::vector;
              
             wareHouse.addVolunteer(vol);
             complete();
-            wareHouse.addAction(this);
 
             
         }
@@ -262,7 +246,6 @@ using std::vector;
         else
         "\nCollectorID: " +std::to_string (_order.getCollectorId());
         complete();}
-        wareHouse.addAction(this);
         }
         PrintOrderStatus * PrintOrderStatus ::clone() const {return new PrintOrderStatus(*this);}
         string PrintOrderStatus ::toString() const {return "orderStatus" + std::to_string(orderId);}
@@ -290,7 +273,6 @@ using std::vector;
         int numLeft = (_customer.getMaxOrders() - _customer.getNumOrders());
             std::cout<< "\nnumOrdersLeft: " + std::to_string(numLeft);
         complete();}
-        wareHouse.addAction(this);
         }
 
         PrintCustomerStatus * PrintCustomerStatus::clone() const {return new PrintCustomerStatus(*this);}
@@ -354,7 +336,6 @@ using std::vector;
             
                 complete();
             }
-                _wareHouse.addAction(this);
 }
 
         PrintVolunteerStatus * PrintVolunteerStatus ::clone() const {return new PrintVolunteerStatus(*this);}
@@ -366,8 +347,7 @@ using std::vector;
         PrintActionsLog ::PrintActionsLog(){};
         void PrintActionsLog ::act(WareHouse &wareHouse) {wareHouse.printActionsLogs();
         complete();
-        wareHouse.addAction(this);
-        }
+              }
         PrintActionsLog* PrintActionsLog ::clone() const {return new PrintActionsLog(*this);}
         std::string PrintActionsLog ::toString() const {return "log";}
     // private:
@@ -385,7 +365,6 @@ using std::vector;
             }
             wareHouse.close();
             complete();
-            wareHouse.addAction(this);
         };
         Close * Close::clone() const {return new Close(*this);};
         std::string Close::toString() const {return "close";};
@@ -396,7 +375,6 @@ using std::vector;
         void BackupWareHouse ::act(WareHouse &wareHouse) {
             backup = new WareHouse(wareHouse);
             complete();
-            wareHouse.addAction(this);
         };
         BackupWareHouse* BackupWareHouse :: clone() const {return new BackupWareHouse(*this);};
         std::string BackupWareHouse ::toString() const {return "backup";};
@@ -413,7 +391,6 @@ using std::vector;
                 wareHouse=*backup;
             complete();
             }
-            wareHouse.addAction(this);
                         
         };
         RestoreWareHouse * RestoreWareHouse ::clone() const {return new RestoreWareHouse(*this);};
