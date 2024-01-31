@@ -177,7 +177,26 @@ class Order;
                 volunteerCounter=other.volunteerCounter;
                 orderCounter=other.orderCounter;
                 
-                //delete all
+                for(BaseAction* action : actionsLog){
+                    delete action;
+                }
+                for(auto vol : volunteers){
+                    delete vol;
+                }
+                for (Order* ord : pendingOrders){
+                    delete ord;
+                }
+                for (Order* ord : inProcessOrders){
+                    delete ord;
+                }
+                for (Order* ord : completedOrders){
+                    delete ord;
+                }
+                for (auto cost : customers){
+                    delete cost;
+                }
+
+                
                 actionsLog.clear();
                 volunteers.clear();
                 pendingOrders.clear();
