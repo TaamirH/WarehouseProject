@@ -44,25 +44,28 @@ using std::vector;
         SimulateStep ::SimulateStep(int _numOfSteps):numOfSteps{_numOfSteps}{};
 
         void SimulateStep ::act(WareHouse &wareHouse) {
+
+            for (int i = numOfSteps ; i>0 ; i--){
             
             for (auto* vol : wareHouse.getVolunteers()){
                 for (Order* ord : wareHouse.getPendingOrders()){
                     if(vol->canTakeOrder(*ord)){
                         vol->acceptOrder( *ord);
-                        ord->setCollectorId(vol->getId());
-                        ord->setStatus(OrderStatus::COLLECTING);
                         wareHouse.moveOrder(ord, vol->getId());
                     }
                 }} 
-                // for (auto* vol : wareHouse.getVolunteers()){
-                //     int activeO = vol->getActiveOrderId();
-                //     vol->step();
-                //     if (activeO==vol->getCompletedOrderId() ){
-                //         wareHouse.moveOrder(&wareHouse.getOrder(activeO), -1);
-                //         if (!vol->hasOrdersLeft())
-                //             wareHouse.deleteVol(vol);
-                //     }
-                // }
+                for (auto* vol : wareHouse.getVolunteers()){
+                    int activeO = vol->getActiveOrderId();
+                    vol->step();
+                    if (activeO==vol->getCompletedOrderId() && activeO!=NO_ORDER ){
+
+                        wareHouse.moveOrder(&wareHouse.getOrder(activeO), -1);
+                        if (!vol->hasOrdersLeft())
+                            wareHouse.deleteVol(vol);
+                    }
+                }
+            }
+
                 complete();
         }
         
@@ -237,14 +240,17 @@ using std::vector;
             std::cout<<"\nNone";
         else
         std::cout << "\nCostumerID: " +std::to_string (_order.getCustomerId()) ;
-        if (_order.getDriverId() == NO_VOLUNTEER)
-            std::cout<<"\nNone";
-        else
-        std::cout << "\nDriverID: " +std::to_string (_order.getDriverId());
+
         if (_order.getCollectorId() == NO_VOLUNTEER)
             std::cout<<"\nNone";
         else
         std::cout<< "\nCollectorID: " +std::to_string (_order.getCollectorId());
+
+        if (_order.getDriverId() == NO_VOLUNTEER)
+            std::cout<<"\nNone";
+        else
+        std::cout << "\nDriverID: " +std::to_string (_order.getDriverId());
+
         complete();}
         }
         PrintOrderStatus * PrintOrderStatus ::clone() const {return new PrintOrderStatus(*this);}
