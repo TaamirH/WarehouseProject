@@ -221,7 +221,9 @@ class Order;
                 for (auto* customer:other.customers){
                     customers.push_back(customer->clone());
             }
+
             }
+            return *this;
         }
         WareHouse:: ~WareHouse (){
             for (auto* actionlog:actionsLog){
@@ -291,9 +293,7 @@ class Order;
                 }
                 // std::cout <<tokens[0];
                 else if (tokens.size()==2 && tokens[0] == "step") {
-                    std::cout<<"step";
                     int numberOfSteps = std::stoi(tokens[1]);
-                    std::cout<<tokens[1];
                     BaseAction* action = new SimulateStep(numberOfSteps);  // Create using new
                     action->act(*this);
                     actionsLog.push_back(action);
@@ -501,7 +501,7 @@ class Order;
                     if (order->getId() == orderId) {
                         return *order;}}
 
-    //throw std::runtime_error("Order not found???"); // Or return a nullptr if preferred
+    throw std::runtime_error("Order not found"); // Or return a nullptr if preferred
 
         };
         int WareHouse::getCustomerCounter() const{
