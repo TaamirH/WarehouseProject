@@ -134,17 +134,24 @@ using std::vector;
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
         void AddCustomer ::act(WareHouse &wareHouse) {     
-            CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
-                 customerName, distance, maxOrders);
             if (customerType==CustomerType::Soldier){
                 SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
-                 customerName, distance, maxOrders);}
-            wareHouse.addCustomer(cos);
+                 customerName, distance, maxOrders);
+                 wareHouse.addCustomer(cos);
+                }
+            else
+                AddCivilian(wareHouse);
             complete();
         }
         AddCustomer * AddCustomer ::clone() const {return new AddCustomer(*this);}
         std::string AddCustomer ::toString() const {return "customer "+ customerName + " "+ CTToString(customerType)
         + " " + std::to_string(distance) + " "+std::to_string(maxOrders);}
+        void AddCustomer::AddCivilian(WareHouse &wareHouse){
+            CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
+            customerName, distance, maxOrders);
+            wareHouse.addCustomer(cos);
+
+        }
     // private:
     //     const string customerName;
     //     const CustomerType customerType;
