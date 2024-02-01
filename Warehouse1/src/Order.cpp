@@ -18,7 +18,7 @@ using std::vector;
         }
         void Order::setStatus(OrderStatus _status){status =_status;}
         void Order::setCollectorId(int _collectorId){collectorId=_collectorId;}
-        void Order::setDriverId(int _driverId){driverId = _driverId;}
+        void Order::setDriverId(int _driverId){driverId = _driverId; collectorId=NO_VOLUNTEER;}
         int Order::getCollectorId() const{return collectorId;}
         int Order::getDriverId() const{return driverId;}
         OrderStatus Order::getStatus() const{return status;}
