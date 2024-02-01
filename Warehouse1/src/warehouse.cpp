@@ -291,7 +291,7 @@ class Order;
                     std::cout << "Invalid input: no command specified\n";
                     continue;
                 }
-                // std::cout <<tokens[0];
+
                 else if (tokens.size()==2 && tokens[0] == "step") {
                     int numberOfSteps = std::stoi(tokens[1]);
                     BaseAction* action = new SimulateStep(numberOfSteps);  // Create using new
@@ -349,7 +349,9 @@ class Order;
                                 }
                             }
                             BaseAction* action = new AddVolunteer(volunteerName, volunteerType, coolDown, maxOrders, 0, 0);  // Set maxDistance and distancePerStep to 0 for collectors
-            // ...
+                            action->act(*this);
+                            actionsLog.push_back(action);
+
                         } else if (volunteerType == "driver" || volunteerType == "limited_driver") {
                             int maxDistance = 0;
                             int distancePerStep = 0;
@@ -536,6 +538,8 @@ class Order;
             else if (status==OrderStatus::COLLECTING){
                  auto it = std::find(inProcessOrders.begin(), inProcessOrders.end(), order);
                 if (it != inProcessOrders.end()) {
+                    std::cout<<"\nmoveOrder: if status COLLECTING";
+                    std::cout<<order->toString();
                     inProcessOrders.erase(it);
                     pendingOrders.push_back(order);}
                 else{

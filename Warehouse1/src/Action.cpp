@@ -45,20 +45,24 @@ using std::vector;
 
         void SimulateStep ::act(WareHouse &wareHouse) {
 
-            for (int i = numOfSteps ; i>0 ; i--){
+            for (int i = numOfSteps ; i>0 ; i=i-1){
             
             for (auto* vol : wareHouse.getVolunteers()){
                 for (Order* ord : wareHouse.getPendingOrders()){
                     if(vol->canTakeOrder(*ord)){
+                        std::cout<<"\norder taken by:";
+                        std::cout<<vol->toString();
                         vol->acceptOrder( *ord);
                         wareHouse.moveOrder(ord, vol->getId());
+                        break;
                     }
                 }} 
                 for (auto* vol : wareHouse.getVolunteers()){
                     int activeO = vol->getActiveOrderId();
+                    std::cout<<"\nactiveO = " +std::to_string(activeO);
                     vol->step();
-                    if (activeO==vol->getCompletedOrderId() && activeO!=NO_ORDER ){
-
+                    if (activeO==vol->getCompletedOrderId() && !(activeO==NO_ORDER) ){
+                        std::cout<<"\ninside loop order" + std::to_string(activeO);
                         wareHouse.moveOrder(&wareHouse.getOrder(activeO), -1);
                         if (!vol->hasOrdersLeft())
                             wareHouse.deleteVol(vol);
@@ -141,7 +145,7 @@ using std::vector;
         }
         AddCustomer * AddCustomer ::clone() const {return new AddCustomer(*this);}
         std::string AddCustomer ::toString() const {return "customer "+ customerName + " "+ CTToString(customerType)
-         + std::to_string(distance) + std::to_string(maxOrders);}
+        + " " + std::to_string(distance) + " "+std::to_string(maxOrders);}
     // private:
     //     const string customerName;
     //     const CustomerType customerType;
@@ -154,6 +158,7 @@ using std::vector;
         AddVolunteer ::AddVolunteer(std::string _name, std::string _volunteerType, int _coolDown,  int _maxOrders, int _maxDistance, int _distancePerStep):
         name{name}, volunteerType{_volunteerType}, cooldown{_coolDown}, maxOrders{_maxOrders}, 
         maxDistance{_maxDistance}, distancePerStep{_distancePerStep}{};
+
         void AddVolunteer ::act(WareHouse &wareHouse) { 
             CollectorVolunteer* vol =new CollectorVolunteer(wareHouse.getVolunteerCounter()
             , name, cooldown);
@@ -299,8 +304,8 @@ using std::vector;
             std::cout<<"voluteerID: " + std::to_string(volunteerId);
             bool busy = vol.isBusy();
             if (!busy)
-                std::cout<< "\nisBusy: False\n None \nNone";
-            else std::cout<<"\n isBusy: True \nOrderId: " + std::to_string(vol.getActiveOrderId());
+                std::cout<< "\nisBusy: False\nNone \nNone";
+            else std::cout<<"\nisBusy: True \nOrderId: " + std::to_string(vol.getActiveOrderId());
             
              if (vol.whoAmI()==0){         //is a collector volunteer
                  CollectorVolunteer* cv = dynamic_cast <CollectorVolunteer*>(&vol);
