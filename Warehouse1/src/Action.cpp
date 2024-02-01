@@ -133,11 +133,10 @@ using std::vector;
         AddCustomer ::AddCustomer(std::string _customerName, std::string _customerType, int _distance, int _maxOrders):
         customerName{_customerName}, customerType{toCustomerType(_customerType)}, distance{_distance}, 
         maxOrders{_maxOrders}{};
-        void AddCustomer ::act(WareHouse &wareHouse) { 
+        void AddCustomer ::act(WareHouse &wareHouse) {     
             CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
                  customerName, distance, maxOrders);
             if (customerType==CustomerType::Soldier){
-                delete cos;
                 SoldierCustomer* cos = new SoldierCustomer(wareHouse.getCustomerCounter(),
                  customerName, distance, maxOrders);}
             wareHouse.addCustomer(cos);
