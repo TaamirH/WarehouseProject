@@ -43,7 +43,9 @@ class order;
         
         int CollectorVolunteer:: getCoolDown() const{return coolDown;}
         int CollectorVolunteer:: getTimeLeft() const{return timeLeft;}
-        bool CollectorVolunteer:: decreaseCoolDown(){if (isBusy())timeLeft--;
+        bool CollectorVolunteer:: decreaseCoolDown(){
+        if (isBusy())
+            timeLeft--;
         return getTimeLeft()==0;}        //Decrease timeLeft by 1,return true if timeLeft=0,false otherwise
         bool CollectorVolunteer:: hasOrdersLeft() const {return true;}
         bool CollectorVolunteer:: canTakeOrder(const Order &order) const {return !this->isBusy()
