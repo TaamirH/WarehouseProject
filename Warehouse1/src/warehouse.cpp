@@ -543,6 +543,7 @@ class Order;
                     auto it = std::find(pendingOrders.begin(), pendingOrders.end(), order);
                     pendingOrders.erase(it);
                     inProcessOrders.push_back(order);
+                    order->setStatus(OrderStatus::DELIVERING);
                 }
             }
             else if (status==OrderStatus::DELIVERING){
