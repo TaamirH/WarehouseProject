@@ -51,18 +51,18 @@ using std::vector;
                         vol->acceptOrder( *ord);
                         ord->setCollectorId(vol->getId());
                         ord->setStatus(OrderStatus::COLLECTING);
-                        // wareHouse.moveOrder(ord, vol->getId());
+                        wareHouse.moveOrder(ord, vol->getId());
                     }
-                }}  
-                for (auto* vol : wareHouse.getVolunteers()){
-                    int activeO = vol->getActiveOrderId();
-                    vol->step();
-                    if (activeO==vol->getCompletedOrderId() ){
-                        wareHouse.moveOrder(&wareHouse.getOrder(activeO), -1);
-                        if (!vol->hasOrdersLeft())
-                            wareHouse.deleteVol(vol);
-                    }
-                }
+                }} 
+                // for (auto* vol : wareHouse.getVolunteers()){
+                //     int activeO = vol->getActiveOrderId();
+                //     vol->step();
+                //     if (activeO==vol->getCompletedOrderId() ){
+                //         wareHouse.moveOrder(&wareHouse.getOrder(activeO), -1);
+                //         if (!vol->hasOrdersLeft())
+                //             wareHouse.deleteVol(vol);
+                //     }
+                // }
                 complete();
         }
         
@@ -193,7 +193,7 @@ using std::vector;
         if (volunteerType=="limited_ driver")
             s= s + std::to_string(maxDistance) +" "+ std::to_string( distancePerStep) 
             +" "+ std::to_string(maxOrders);
-        
+         return s;
         }
 
 //     private:
@@ -226,25 +226,25 @@ using std::vector;
 
         void PrintOrderStatus ::act(WareHouse &wareHouse)  {
 
-        if (orderId>wareHouse.getOrderCounter() || orderId<0)
+        if (orderId>=wareHouse.getOrderCounter() || orderId<0)
             error("Order doesn't exist");
         else{
         Order _order = wareHouse.getOrder(orderId); 
         
         std::cout<< "OrderId: " + std::to_string(orderId) +
         "\nOrderStatus: " + OSToString(_order.getStatus());
-        if (_order.getCollectorId() == NO_VOLUNTEER)
+        if (_order.getCustomerId() == NO_VOLUNTEER)
             std::cout<<"\nNone";
         else
-        "\nCostumerID: " +std::to_string (_order.getCustomerId()) ;
+        std::cout << "\nCostumerID: " +std::to_string (_order.getCustomerId()) ;
         if (_order.getDriverId() == NO_VOLUNTEER)
             std::cout<<"\nNone";
         else
-        "\nDriverID: " +std::to_string (_order.getDriverId());
+        std::cout << "\nDriverID: " +std::to_string (_order.getDriverId());
         if (_order.getCollectorId() == NO_VOLUNTEER)
             std::cout<<"\nNone";
         else
-        "\nCollectorID: " +std::to_string (_order.getCollectorId());
+        std::cout<< "\nCollectorID: " +std::to_string (_order.getCollectorId());
         complete();}
         }
         PrintOrderStatus * PrintOrderStatus ::clone() const {return new PrintOrderStatus(*this);}
@@ -257,7 +257,7 @@ using std::vector;
         PrintCustomerStatus::PrintCustomerStatus(int _customerId):customerId{_customerId}{};
         void PrintCustomerStatus::act(WareHouse &wareHouse) {
 
-        if (customerId>wareHouse.getCustomerCounter() || customerId<0){
+        if (customerId>=wareHouse.getCustomerCounter() || customerId<0){
             error("Customer doesn't exist");
         }else{
         Customer &_customer = wareHouse.getCustomer(customerId); 
@@ -285,7 +285,7 @@ using std::vector;
         void PrintVolunteerStatus ::act(WareHouse &_wareHouse) {
             auto it = std::find(_wareHouse.getDeletedVolunteers().begin(),
              _wareHouse.getDeletedVolunteers().end(), volunteerId);
-            if (volunteerId>_wareHouse.getVolunteerCounter() || volunteerId<0 ||(it != _wareHouse.getDeletedVolunteers().end()) ) {
+            if (volunteerId>=_wareHouse.getVolunteerCounter() || volunteerId<0 ||(it != _wareHouse.getDeletedVolunteers().end()) ) {
                 error("Volunteer doesn't exist");
             }else{
             Volunteer &vol =_wareHouse.getVolunteer(volunteerId);
