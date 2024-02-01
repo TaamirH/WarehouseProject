@@ -243,7 +243,7 @@ using std::vector;
         if (orderId>=wareHouse.getOrderCounter() || orderId<0)
             error("Order doesn't exist");
         else{
-        Order _order = wareHouse.getOrder(orderId); 
+        Order &_order = wareHouse.getOrder(orderId); 
         
         std::cout<< "OrderId: " + std::to_string(orderId) +
         "\nOrderStatus: " + OSToString(_order.getStatus());
