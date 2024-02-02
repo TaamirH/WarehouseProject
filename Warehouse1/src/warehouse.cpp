@@ -141,16 +141,26 @@ class Order;
     // Close the file
     inputFile.close();
 }
-        WareHouse::WareHouse(const string &configFilePath){
-            customerCounter=0;
-            volunteerCounter=0;
-            orderCounter=0;
+        WareHouse::WareHouse(const string &configFilePath):
+            isOpen(false),
+            actionsLog(),  // Default initialization for vector
+            volunteers(),  // Default initialization for vector
+            pendingOrders(),
+            inProcessOrders(),
+            completedOrders(),
+            customers(),
+            customerCounter(0),  // Assuming starting value is 0
+            volunteerCounter(0),
+            orderCounter(0),
+            deletedVolunteers() {
             open();
             parseFile(configFilePath);
         };
         WareHouse::WareHouse(WareHouse &other):
-            isOpen(other.isOpen),customerCounter(other.customerCounter),
-            volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter){
+            isOpen(other.isOpen),actionsLog(),volunteers(),pendingOrders(),inProcessOrders(),
+            completedOrders(),customers(),customerCounter(other.customerCounter),
+            volunteerCounter(other.volunteerCounter),orderCounter(other.orderCounter),
+            deletedVolunteers(){
             for (auto* action:other.actionsLog){
                 actionsLog.push_back(action->clone());
             }    
@@ -168,6 +178,9 @@ class Order;
             }
             for (auto* customer:other.customers){
                 customers.push_back(customer->clone());
+            }
+            for (int deleted:other.deletedVolunteers){
+                deletedVolunteers.push_back(deleted);
             }
         }
         WareHouse& WareHouse:: operator=(const WareHouse &other){
@@ -247,15 +260,16 @@ class Order;
             }
          WareHouse::WareHouse(WareHouse &&other) :
             isOpen(other.isOpen),
-            customerCounter(other.customerCounter),
-            volunteerCounter(other.volunteerCounter),
-            orderCounter(other.orderCounter),
-            actionsLog(std::move(other.actionsLog)),  // Move containers directly
+            actionsLog(std::move(other.actionsLog)),
             volunteers(std::move(other.volunteers)),
             pendingOrders(std::move(other.pendingOrders)),
             inProcessOrders(std::move(other.inProcessOrders)),
             completedOrders(std::move(other.completedOrders)),
-            customers(std::move(other.customers)) {}
+            customers(std::move(other.customers)),
+            customerCounter(other.customerCounter),
+            volunteerCounter(other.volunteerCounter),
+            orderCounter(other.orderCounter),
+            deletedVolunteers(std::move(other.deletedVolunteers)) {}
 
     WareHouse& WareHouse:: operator=(WareHouse &&other) {  // Correct declaration
         if (this != &other) {

@@ -29,7 +29,7 @@ class Order {
         const std::string toString() const;
         int getDistance() const;
         Order *clone() const;
-
+        virtual ~Order() = default;  // Virtual destructor
     private:
         const int id;
         const int customerId;

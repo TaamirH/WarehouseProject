@@ -7,9 +7,8 @@ using std::vector;
 
 
         Customer::Customer(int _id, const string &_name, int _locationDistance, int _maxOrders):
-            id{_id},name{_name},locationDistance{_locationDistance},maxOrders{_maxOrders}{
-            madeOrders=0;
-        }
+            id{_id},name{_name},locationDistance{_locationDistance},maxOrders{_maxOrders},
+            ordersId(),madeOrders(0){}
         const string& Customer::getName() const{
             return name; };
         int Customer::getId() const{

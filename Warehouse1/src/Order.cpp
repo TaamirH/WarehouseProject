@@ -9,8 +9,8 @@ using std::vector;
 #define NO_VOLUNTEER -1
 
         Order::Order(int _id, int _customerId, int _distance):
-            id{_id},customerId{_customerId},distance{_distance}{collectorId=NO_VOLUNTEER;
-            driverId=NO_VOLUNTEER; status = OrderStatus::PENDING;};
+            id{_id},customerId{_customerId},distance{_distance},status{OrderStatus::PENDING},
+            collectorId{NO_VOLUNTEER},driverId{NO_VOLUNTEER}{};
         int Order::getId() const{
             return id;}
         int Order::getCustomerId() const{

@@ -17,7 +17,7 @@ using std::vector;
 
 
 
-        BaseAction:: BaseAction(){};
+        BaseAction:: BaseAction():errorMsg{""},status{ActionStatus::COMPLETED}{};
         ActionStatus BaseAction::getStatus() const{return status;}
         // virtual void act(WareHouse& wareHouse)=0;
         // virtual string toString() const=0;
@@ -166,33 +166,46 @@ using std::vector;
         maxDistance{_maxDistance}, distancePerStep{_distancePerStep}{};
 
         void AddVolunteer ::act(WareHouse &wareHouse) { 
+            if (volunteerType=="collector"){
             CollectorVolunteer* vol =new CollectorVolunteer(wareHouse.getVolunteerCounter()
             , name, cooldown);
+            wareHouse.addVolunteer(vol);}
+
         
          if (volunteerType=="limited_collector"){
-            delete vol;
-            LimitedCollectorVolunteer* vol = new LimitedCollectorVolunteer(wareHouse.getVolunteerCounter()
-            , name, cooldown, maxOrders);
+            addLimitedCollector( wareHouse);
          }
         
         if (volunteerType=="driver"){
-            delete vol;
-            DriverVolunteer* vol = new DriverVolunteer(wareHouse.getVolunteerCounter(),
-             name, maxDistance, distancePerStep);
+            addDriver(wareHouse);
 
         }
         
         if (volunteerType=="limited_ driver"){
-            delete vol;
-            LimitedDriverVolunteer* vol = new LimitedDriverVolunteer(wareHouse.getVolunteerCounter(),
-             name, maxDistance, distancePerStep, maxOrders);}
-             
-            wareHouse.addVolunteer(vol);
+            addLimitedDriver(wareHouse);
+        }
             complete();
 
             
         }
+        void AddVolunteer:: addLimitedCollector(WareHouse &wareHouse){
+            LimitedCollectorVolunteer* vol = new LimitedCollectorVolunteer(wareHouse.getVolunteerCounter()
+            , name, cooldown, maxOrders);
+            wareHouse.addVolunteer(vol);
 
+        }
+        void AddVolunteer:: addDriver(WareHouse &wareHouse){
+            DriverVolunteer* vol = new DriverVolunteer(wareHouse.getVolunteerCounter(),
+             name, maxDistance, distancePerStep);
+            wareHouse.addVolunteer(vol);
+
+        }
+        void AddVolunteer:: addLimitedDriver(WareHouse &wareHouse){
+            LimitedDriverVolunteer* vol = new LimitedDriverVolunteer(wareHouse.getVolunteerCounter(),
+             name, maxDistance, distancePerStep, maxOrders);
+            wareHouse.addVolunteer(vol);
+
+        }
         AddVolunteer * AddVolunteer ::clone() const {return new AddVolunteer(*this);}
         std::string AddVolunteer ::toString() const {std::string s = "volunteer " +name + " "+ volunteerType + " ";
         if (volunteerType=="collector")
@@ -319,7 +332,7 @@ using std::vector;
                    std::cout<<"\nTimeLeft: "+  std::to_string(cv->getTimeLeft()) ;
                 else
                     std::cout<<"\nNone";
-                    std::cout<< "\nOrdersLeft: No Limit";
+                std::cout<< "\nOrdersLeft: No Limit";
                 
              }
             else if (vol.whoAmI()==1){         //is a limited collector volunteer

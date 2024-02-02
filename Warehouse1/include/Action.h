@@ -23,6 +23,7 @@ class BaseAction{
         virtual void act(WareHouse& wareHouse)=0;
         virtual std::string toString() const=0;
         virtual BaseAction* clone() const=0;
+        virtual ~BaseAction() = default;  // Virtual destructor
 
     protected:
         void complete();
@@ -77,6 +78,9 @@ class AddVolunteer : public BaseAction {
     public:
         AddVolunteer(std::string name, std::string volunteerType, int coolDown,  int maxOrders, int maxDistance, int distancePerStep);
         void act(WareHouse &wareHouse) override;
+        void addLimitedCollector(WareHouse &wareHouse);
+        void addDriver(WareHouse &wareHouse);
+        void addLimitedDriver(WareHouse &wareHouse);
         AddVolunteer *clone() const override;
         std::string toString() const override;
         std::string OSToString(OrderStatus _orderStatus) const;

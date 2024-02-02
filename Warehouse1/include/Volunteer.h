@@ -24,6 +24,7 @@ class Volunteer {
         virtual std::string toString() const = 0;
         virtual Volunteer* clone() const = 0; //Return a copy of the volunteer
         virtual int whoAmI () const = 0;
+        virtual ~Volunteer() = default;  // Virtual destructor
 
     protected:
         int completedOrderId; //Initialized to NO_ORDER if no order has been completed yet

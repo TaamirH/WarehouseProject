@@ -9,8 +9,11 @@ class order;
 #define NO_ORDER -1
 
 
-        Volunteer::Volunteer(int _id, const string &_name):id{_id}, name{_name}{
-            activeOrderId=NO_ORDER; completedOrderId=NO_ORDER;};
+        Volunteer::Volunteer(int _id, const std::string &_name) :
+            id{_id},        
+            name{_name},    
+            completedOrderId{NO_ORDER},
+            activeOrderId{NO_ORDER} {};
         int Volunteer:: getId() const{return id;}
         const string &Volunteer:: getName() const{return name;}
         int Volunteer:: getActiveOrderId() const{return activeOrderId;}
@@ -98,8 +101,8 @@ class order;
         int DriverVolunteer::getMaxDistance() const{return maxDistance;}
         int DriverVolunteer::getDistancePerStep() const{return distancePerStep;}  
         bool DriverVolunteer::decreaseDistanceLeft()
-        {if(isBusy())   
-            setDistanceLeft (getDistanceLeft() - getDistancePerStep());
+            {if(isBusy())   
+                setDistanceLeft (getDistanceLeft() - getDistancePerStep());
             return distanceLeft<=0;}
                 //Decrease distanceLeft by distancePerStep,return true if distanceLeft<=0,false otherwise
         bool DriverVolunteer::hasOrdersLeft() const {return true;}
