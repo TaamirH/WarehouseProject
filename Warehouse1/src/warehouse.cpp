@@ -541,30 +541,28 @@ class Order;
             cout <<"Warehouse is Open!";
         };
         void WareHouse::moveOrder(Order *order,int id){
-            OrderStatus status=order->getStatus();
-            if (status==OrderStatus::PENDING){
+            OrderStatus status=order->getStatus(); 
+            if (status==OrderStatus::PENDING){      // order taken by collector - move to in proccess
                 order->setStatus(OrderStatus::COLLECTING);
                 order->setCollectorId(id);
                 auto it = std::find(pendingOrders.begin(), pendingOrders.end(), order);
                 pendingOrders.erase(it);
                 inProcessOrders.push_back(order);
             }
-            else if (status==OrderStatus::COLLECTING){
+            else if (status==OrderStatus::COLLECTING){   // order finished - move to pending
                  auto it = std::find(inProcessOrders.begin(), inProcessOrders.end(), order);
                 if (it != inProcessOrders.end()) {
-                    std::cout<<"\nmoveOrder: if status COLLECTING";
-                    std::cout<<order->toString();
                     inProcessOrders.erase(it);
                     pendingOrders.push_back(order);}
                 else{
-                    order->setDriverId(id);
+                    order->setDriverId(id);     //order taken by drive - move to in process
                     auto it = std::find(pendingOrders.begin(), pendingOrders.end(), order);
                     pendingOrders.erase(it);
                     inProcessOrders.push_back(order);
                     order->setStatus(OrderStatus::DELIVERING);
                 }
             }
-            else if (status==OrderStatus::DELIVERING){
+            else if (status==OrderStatus::DELIVERING){      //order finished
                 order->setStatus(OrderStatus::COMPLETED);
                 auto it = std::find(inProcessOrders.begin(), inProcessOrders.end(), order);
                 inProcessOrders.erase(it);
