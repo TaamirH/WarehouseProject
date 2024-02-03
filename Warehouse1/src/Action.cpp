@@ -30,7 +30,7 @@ using std::vector;
         void BaseAction::error(std::string _errorMsg){
             status = ActionStatus::ERROR;
             errorMsg=_errorMsg;
-            std::cout <<"Error:"<<errorMsg;
+            std::cout <<"Error: "<<errorMsg;
         };
         std::string BaseAction::getErrorMsg() const{
             return errorMsg;}
@@ -48,23 +48,19 @@ using std::vector;
             for (int i = numOfSteps ; i>0 ; i=i-1){
             
             for (auto* vol : wareHouse.getVolunteers()){
-                for (Order* ord : wareHouse.getPendingOrders()){
+                for (Order* ord : wareHouse.getPendingOrders()){    //handle volunteer class here
                     if(vol->canTakeOrder(*ord)){
-                        std::cout<<"\norder taken by:";
-                        std::cout<<vol->toString();
                         vol->acceptOrder( *ord);
-                        wareHouse.moveOrder(ord, vol->getId());
+                        wareHouse.moveOrder(ord, vol->getId());     // handle order class inside moveOrder func
                         break;
                     }
                 }} 
                 for (auto* vol : wareHouse.getVolunteers()){
                     int activeO = vol->getActiveOrderId();
-                    std::cout<<"\nactiveO = " +std::to_string(activeO);
                     vol->step();
-                    if (activeO==vol->getCompletedOrderId() && !(activeO==NO_ORDER) ){
-                        std::cout<<"\ninside loop order" + std::to_string(activeO);
+                    if (activeO==vol->getCompletedOrderId() && !(activeO==NO_ORDER) ){  //vol just finished
                         wareHouse.moveOrder(&wareHouse.getOrder(activeO), -1);
-                        if (!vol->hasOrdersLeft())
+                        if (!vol->hasOrdersLeft())      //if it limited volunteer that finished
                             wareHouse.deleteVol(vol);
                     }
                 }
@@ -85,14 +81,15 @@ using std::vector;
         AddOrder ::AddOrder(int id): customerId{id}{};
         void AddOrder ::act(WareHouse &wareHouse) {
 
-
-    const Customer& customer = wareHouse.getCustomer(customerId);
-
-  if (customerId < 0 || customerId > wareHouse.getCustomerCounter() || 
-      !customer.canMakeOrder()) {
+  if (customerId < 0 || customerId >= wareHouse.getCustomerCounter()){
     error("Cannot place this order");
     return; // Early return on error
   }
+const Customer& customer = wareHouse.getCustomer(customerId);
+if (!(customer.canMakeOrder())) {
+    error("Cannot place this order");
+    return; // Early return on error)
+}
 
   int orderId = wareHouse.getOrderCounter();
 
