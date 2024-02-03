@@ -139,13 +139,15 @@ using std::vector;
                  customerName, distance, maxOrders);
                  wareHouse.addCustomer(cos);
                 }
-            else
-                AddCivilian(wareHouse);
+            else {
+        this->AddCivilian(wareHouse); // Call AddCivilian using 'this' pointer
+    }
             complete();
         }
         AddCustomer * AddCustomer ::clone() const {return new AddCustomer(*this);}
         std::string AddCustomer ::toString() const {return "customer "+ customerName + " "+ CTToString(customerType)
         + " " + std::to_string(distance) + " "+std::to_string(maxOrders);}
+
         void AddCustomer::AddCivilian(WareHouse &wareHouse){
             CivilianCustomer* cos = new CivilianCustomer(wareHouse.getCustomerCounter(),
             customerName, distance, maxOrders);
@@ -166,23 +168,23 @@ using std::vector;
         maxDistance{_maxDistance}, distancePerStep{_distancePerStep}{};
 
         void AddVolunteer ::act(WareHouse &wareHouse) { 
-            if (volunteerType=="collector"){
+        if (volunteerType=="collector"){
             CollectorVolunteer* vol =new CollectorVolunteer(wareHouse.getVolunteerCounter()
             , name, cooldown);
             wareHouse.addVolunteer(vol);}
 
         
-         if (volunteerType=="limited_collector"){
-            addLimitedCollector( wareHouse);
+        else if (volunteerType=="limited_collector"){
+            this->addLimitedCollector( wareHouse);
          }
         
-        if (volunteerType=="driver"){
-            addDriver(wareHouse);
+        else if (volunteerType=="driver"){
+            this->addDriver(wareHouse);
 
         }
         
-        if (volunteerType=="limited_ driver"){
-            addLimitedDriver(wareHouse);
+        else if (volunteerType=="limited_ driver"){
+            this->addLimitedDriver(wareHouse);
         }
             complete();
 
@@ -302,6 +304,7 @@ using std::vector;
         }
         int numLeft = (_customer.getMaxOrders() - _customer.getNumOrders());
             std::cout<< "\nnumOrdersLeft: " + std::to_string(numLeft);
+        delete pos;
         complete();}
         }
 
