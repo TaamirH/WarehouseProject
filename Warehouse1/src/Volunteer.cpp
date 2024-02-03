@@ -10,10 +10,10 @@ class order;
 
 
         Volunteer::Volunteer(int _id, const std::string &_name) :
-            id{_id},        
-            name{_name},    
             completedOrderId{NO_ORDER},
-            activeOrderId{NO_ORDER} {};
+            activeOrderId{NO_ORDER},
+            id{_id},        
+            name{_name} {};
         int Volunteer:: getId() const{return id;}
         const string &Volunteer:: getName() const{return name;}
         int Volunteer:: getActiveOrderId() const{return activeOrderId;}
@@ -154,4 +154,3 @@ class order;
     
         // const int maxOrders; // The number of orders the volunteer can process in the whole simulation
         // int ordersLeft; // The number of orders the volunteer can still take
-
