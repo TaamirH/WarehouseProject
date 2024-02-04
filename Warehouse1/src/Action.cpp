@@ -265,12 +265,12 @@ if (!(customer.canMakeOrder())) {
         std::cout << "\nCostumerID: " +std::to_string (_order.getCustomerId()) ;
 
         if (_order.getCollectorId() == NO_VOLUNTEER)
-            std::cout<<"\nNone";
+            std::cout<<"\nCollector: None";
         else
         std::cout<< "\nCollectorID: " +std::to_string (_order.getCollectorId());
 
         if (_order.getDriverId() == NO_VOLUNTEER)
-            std::cout<<"\nNone";
+            std::cout<<"\nDriver: None";
         else
         std::cout << "\nDriverID: " +std::to_string (_order.getDriverId());
 
